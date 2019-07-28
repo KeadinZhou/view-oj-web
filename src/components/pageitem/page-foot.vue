@@ -2,7 +2,7 @@
     <div class="page-foot">
         <p>
             <el-divider></el-divider>
-            Copyright &copy; 2017-{{ new Date().getFullYear() }} ZUCC-ACM-LAB. All Rights <br>
+            Copyright &copy; 2017-{{ new Date().getFullYear() }} ZUCC-ACM-LAB. All Rights Reserved.<br>
             Powered by Taoting & Keadin
         </p>
     </div>

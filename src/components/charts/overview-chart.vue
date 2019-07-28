@@ -77,7 +77,7 @@ export default {
       loading: false,
       chartTitle: {
         text: 'Training status chart of Grade 20' + this.grade,
-        subtext: this.daterange[0] ? ('The data from ' + this.daterange[0] + ' to ' + this.daterange[1]) : ('Last week\'s data'),
+        subtext: this.daterange && this.daterange[0] ? ('The data from ' + this.daterange[0] + ' to ' + this.daterange[1]) : ('Last week\'s data'),
         left: 'center',
         right: 'center',
         textStyle: {

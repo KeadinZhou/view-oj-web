@@ -21,23 +21,28 @@ export default {
     'page-nav': PageNav,
     'page-foot': PageFoot
   },
+  data () {
+    return {
+      clientHeight: window.innerHeight,
+      clientWidth: window.innerWidth
+    }
+  },
   methods: {
     fixBox () {
+      this.clientHeight = window.innerHeight
+      this.clientWidth = window.innerWidth
       this.$refs.pageMainBox.style.minHeight = this.clientHeight - 61 - 44 - 120 + 'px'
       this.$refs.pageBox.style.height = this.clientHeight + 'px'
+      this.$refs.pageBox.style.widows = this.clientWidth + 'px'
     }
   },
   mounted () {
     this.fixBox()
-  },
-  computed: {
-    clientHeight: function () {
-      return document.documentElement.clientHeight
-    }
-  },
-  watch: {
-    clientHeight: function () {
-      this.fixBox()
+    const that = this
+    window.onresize = () => {
+      return (() => {
+        that.fixBox()
+      })()
     }
   }
 }
@@ -54,6 +59,7 @@ export default {
         font-family: "Helvetica Neue",Helvetica,"Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
         overflow: hidden;
         width: 100%;
+        min-width: 1100px;
     }
     #appBox{
         width: 1100px;

@@ -35,7 +35,7 @@ export default {
   },
   methods: {
     changeOverviewDate () {
-      this.$store.commit('updateOverview', this.inputDate.length === 2 ? {
+      this.$store.commit('updateOverview', this.inputDate !== null && this.inputDate.length === 2 ? {
         start_date: this.inputDate[0],
         end_date: this.inputDate[1]
       } : null)
