@@ -27,7 +27,6 @@ new Vue({
   created () {
     store.commit('savePage', this)
     this.$store.commit('updateUser')
-    this.$store.commit('updateOJlist')
     this.$store.commit('updateUserlist')
   }
 })
