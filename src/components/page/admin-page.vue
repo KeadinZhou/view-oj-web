@@ -72,7 +72,6 @@ export default {
   },
   methods: {
     switchChange (row) {
-      console.log(row)
       this.$store.commit('modifyUserInfo', {
         username: row.username,
         nickname: row.nickname,

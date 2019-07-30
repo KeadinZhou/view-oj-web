@@ -82,24 +82,17 @@ export default {
       })
     },
     showData () {
-      if (this.$store.state.OJSetTableData && this.$store.state.OJlist) {
+      if (this.$store.state.OJSetTableData) {
         this.tableData = []
-        for (var item of this.$store.state.OJlist) {
-          if (item[1].status === 1) {
-            this.tableData.push({
-              userid: this.userid,
-              username: this.username,
-              ojid: item[0],
-              oj: item[1].name,
-              id: ''
-            })
-          }
-        }
-        for (var i in this.tableData) {
-          item = this.tableData[i]
-          if (this.$store.state.OJSetTableData.has(item.ojid)) {
-            item.id = this.$store.state.OJSetTableData.get(item.ojid)
-          }
+        for (var i in this.$store.state.OJSetTableData) {
+          var item = this.$store.state.OJSetTableData[i]
+          this.tableData.push({
+            userid: this.userid,
+            username: this.username,
+            ojid: item.oj_id,
+            oj: item.oj_name,
+            id: item.oj_username
+          })
         }
       } else {
         setTimeout(() => {

@@ -125,7 +125,7 @@ var mutations = {
         for (var i in data.data.data) {
           var item = data.data.data[i]
           state.UserallChartData.push({
-            'OJ': item.oj_id,
+            'OJ': item.oj_name,
             'Accept': item.accept_problem_count
           })
         }
@@ -162,10 +162,10 @@ var mutations = {
   updateOJSetTableData (state, username) {
     state.page.$http.post(api + '/v1/user/get_oj_username', {username: username})
       .then(data => {
-        state.OJSetTableData = new Map()
+        state.OJSetTableData = []
         for (var i in data.data.data) {
           var item = data.data.data[i]
-          state.OJSetTableData.set(item.oj_id, item.username)
+          state.OJSetTableData.push(item)
         }
       })
       .catch(function (error) {
@@ -176,9 +176,9 @@ var mutations = {
   },
   modifyOJID (state, data) {
     state.page.$http.post(api + '/v1/user/modify_oj_username', {
-      user_id: data.userid,
+      username: data.userid,
       oj_id: data.ojid,
-      username: data.id
+      oj_username: data.id
     })
       .then(data => {
         state.page.$message.success(data.data.msg)
@@ -190,8 +190,8 @@ var mutations = {
       })
   },
   updateUserOJData (state, data) {
-    state.page.$http.post(api + '/v1/task/refresh_data', {
-      user_id: data.userid,
+    state.page.$http.post(api + '/v1/task/refresh_accept_problem', {
+      username: data.userid,
       oj_id: data.ojid
     })
       .then(data => {
