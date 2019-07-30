@@ -12,6 +12,8 @@
             <el-button icon="el-icon-search" plain @click="dateSure()"></el-button>
         </div>
         <template v-if="isRefresh">
+            <count-chart :userid="this.userid" :inputDate="this.sureDate"></count-chart>
+            <el-divider></el-divider>
             <ac-table :userid="this.userid" :inputDate="this.sureDate"></ac-table>
         </template>
     </div>
@@ -19,13 +21,15 @@
 
 <script>
 import ACTable from '@/components/pageitem/ac-table'
+import CountChart from '@/components/charts/count-chart'
 export default {
   name: 'ac-detail-part',
   props: {
     userid: String
   },
   components: {
-    'ac-table': ACTable
+    'ac-table': ACTable,
+    'count-chart': CountChart
   },
   data () {
     return {

@@ -16,14 +16,14 @@
                             {{ scope.row.rating }}
                         </template>
                     </el-table-column>
-                    <el-table-column label="Time" align="center">
-                        <template slot-scope="scope">
-                            {{ scope.row.create_time }}
-                        </template>
-                    </el-table-column>
                     <el-table-column label="Contribution" align="center">
                         <template slot-scope="scope">
                             +{{ scope.row.add_rating }}
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="Time" align="center">
+                        <template slot-scope="scope">
+                            {{ scope.row.create_time }}
                         </template>
                     </el-table-column>
                     <el-table-column label="Refresh" width="80px">
