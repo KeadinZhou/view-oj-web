@@ -48,29 +48,27 @@ export default {
       })
     },
     initData () {
-      if (this.$store.state.Userlist) {
-        this.$store.commit('updateUserallChartData', this.userid)
-        this.username = this.$store.state.Userlist.get(this.userid).nickname
-        setTimeout(() => {
-          this.chartData.rows = this.$store.state.UserallChartData
-          this.loading = false
-          this.reFreshChart()
-        }, 500)
-      } else {
-        setTimeout(() => {
-          this.initData()
-        }, 500)
-      }
+      this.$store.commit('updateUserallChartData', this.userid)
+      setTimeout(() => {
+        this.chartData.rows = this.$store.state.UserallChartData
+        this.loading = false
+        this.reFreshChart()
+      }, 500)
     },
     getData () {
       this.loading = true
-      if (!this.$store.state.Userlist) {
-        setTimeout(() => {
+      var api = this.$store.state.api
+      var that = this
+      that.$http.post(api + '/v1/user/get_user_info_by_username', {username: this.userid})
+        .then(data => {
+          this.username = data.data.data.nickname
           this.initData()
-        }, 500)
-      } else {
-        this.initData()
-      }
+        })
+        .catch(function (error) {
+          if (error.response) {
+            that.$message.error(error.response.data.msg)
+          }
+        })
     }
   },
   created () {

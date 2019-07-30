@@ -6,22 +6,17 @@
         <el-card class="box-card" shadow="hover">
             <div v-loading="loading" v-if="isRefresh">
                 <el-table :data="tableData" style="width: 100%">
-                    <el-table-column label="Userid">
+                    <el-table-column label="Userid" align="center">
                         <template slot-scope="scope">
                             {{ scope.row.userid }}
                         </template>
                     </el-table-column>
-                    <el-table-column label="Name">
-                        <template slot-scope="scope">
-                            {{ scope.row.username }}
-                        </template>
-                    </el-table-column>
-                    <el-table-column label="OJ">
+                    <el-table-column label="OJ" align="center">
                         <template slot-scope="scope">
                             {{ scope.row.oj }}
                         </template>
                     </el-table-column>
-                    <el-table-column label="ID" width="130px">
+                    <el-table-column label="ID" width="200px" align="center">
                         <template slot-scope="scope">
                             {{ scope.row.id }}&nbsp;<span style="cursor: pointer" @click="editOJID(scope.row)"><i class="el-icon-edit"></i></span>
                         </template>
@@ -88,7 +83,6 @@ export default {
           var item = this.$store.state.OJSetTableData[i]
           this.tableData.push({
             userid: this.userid,
-            username: this.username,
             ojid: item.oj_id,
             oj: item.oj_name,
             id: item.oj_username
@@ -100,29 +94,12 @@ export default {
         }, 500)
       }
     },
-    initData () {
-      if (this.$store.state.Userlist) {
-        this.$store.commit('updateOJSetTableData', this.userid)
-        this.username = this.$store.state.Userlist.get(this.userid).nickname
-        setTimeout(() => {
-          this.showData()
-          this.reFreshChart()
-        }, 500)
-      } else {
-        setTimeout(() => {
-          this.initData()
-        }, 500)
-      }
-    },
     getData () {
-      this.loading = true
-      if (!this.$store.state.Userlist) {
-        setTimeout(() => {
-          this.initData()
-        }, 500)
-      } else {
-        this.initData()
-      }
+      this.$store.commit('updateOJSetTableData', this.userid)
+      setTimeout(() => {
+        this.showData()
+        this.reFreshChart()
+      }, 500)
     }
   },
   created () {

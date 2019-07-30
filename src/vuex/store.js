@@ -6,6 +6,7 @@ Vue.use(Vuex)
 const api = 'http://47.111.25.1:5000'
 var state = {
   page: null,
+  api: api,
   user: {
     userid: '',
     username: '',
@@ -16,7 +17,9 @@ var state = {
   OJlist: null, // Map
   UserallChartData: [],
   Userlist: null, // Map
-  OJSetTableData: null
+  OJSetTableData: null,
+  ACTableData: [],
+  ACTableSize: 0
 }
 
 var mutations = {
@@ -119,7 +122,7 @@ var mutations = {
       })
   },
   updateUserallChartData (state, username) {
-    state.page.$http.post(api + '/v1/data/get_accept_problem_distributed', {username: username})
+    state.page.$http.post(api + '/v1/data/get_accept_problem_oj_distributed', {username: username})
       .then(data => {
         state.UserallChartData = []
         for (var i in data.data.data) {
@@ -194,6 +197,17 @@ var mutations = {
       username: data.userid,
       oj_id: data.ojid
     })
+      .then(data => {
+        state.page.$message.success(data.data.msg)
+      })
+      .catch(function (error) {
+        if (error.response) {
+          state.page.$message.error(error.response.data.msg)
+        }
+      })
+  },
+  refreshProblemRating (state, id) {
+    state.page.$http.post(api + '/v1/task/refresh_problem_rating', {problem_id: id})
       .then(data => {
         state.page.$message.success(data.data.msg)
       })

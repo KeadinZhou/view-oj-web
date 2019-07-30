@@ -3,17 +3,21 @@
         <userall-chart :userid="this.pageid"></userall-chart>
         <el-divider></el-divider>
         <oj-set-table :userid="this.pageid"></oj-set-table>
+        <el-divider></el-divider>
+        <ac-detail-part :userid="this.pageid"></ac-detail-part>
     </div>
 </template>
 
 <script>
 import UserallChart from '@/components/charts/userall-chart'
 import OJSetTable from '@/components/pageitem/oj-set-table'
+import ACDetailPart from '@/components/pageitem/ac-detail-part'
 export default {
   name: 'userinfo-page',
   components: {
     'userall-chart': UserallChart,
-    'oj-set-table': OJSetTable
+    'oj-set-table': OJSetTable,
+    'ac-detail-part': ACDetailPart
   },
   data () {
     return {
