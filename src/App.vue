@@ -1,5 +1,6 @@
 <template>
     <div id="app" ref="pageBox">
+        <task-box></task-box>
         <el-scrollbar class="scrollbar">
             <div id="appBox">
                 <page-nav></page-nav>
@@ -15,11 +16,13 @@
 <script>
 import PageNav from '@/components/pageitem/page-nav'
 import PageFoot from '@/components/pageitem/page-foot'
+import TaskBox from '@/components/pageitem/task-box'
 export default {
   name: 'App',
   components: {
     'page-nav': PageNav,
-    'page-foot': PageFoot
+    'page-foot': PageFoot,
+    'task-box': TaskBox
   },
   data () {
     return {
