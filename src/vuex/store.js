@@ -10,7 +10,8 @@ var state = {
   user: {
     userid: '',
     username: '',
-    permission: ''
+    permission: '',
+    status: ''
   },
   OverviewData: [],
   OverviewGrade: [],
@@ -32,6 +33,7 @@ var mutations = {
         state.user.userid = data.data.data.username
         state.user.username = data.data.data.nickname
         state.user.permission = data.data.data.permission
+        state.user.status = data.data.data.status
       })
       .catch(function (error) {
         if (error.response) {}
@@ -209,6 +211,34 @@ var mutations = {
   refreshProblemRating (state, id) {
     state.page.$http.post(api + '/v1/task/refresh_problem_rating', {problem_id: id})
       .then(data => {
+        state.page.$message.success(data.data.msg)
+      })
+      .catch(function (error) {
+        if (error.response) {
+          state.page.$message.error(error.response.data.msg)
+        }
+      })
+  },
+  modifyPassword (state, data) {
+    state.page.$http.post(api + '/v1/user/modify_password', data)
+      .then(data => {
+        state.page.$message.success(data.data.msg)
+      })
+      .catch(function (error) {
+        if (error.response) {
+          state.page.$message.error(error.response.data.msg)
+        }
+      })
+  },
+  modifyUserNameBySelf (state, username) {
+    state.page.$http.post(api + '/v1/user/modify_user_info', {
+      username: state.user.userid,
+      nickname: username,
+      permission: state.user.permission,
+      status: state.user.status
+    })
+      .then(data => {
+        state.user.username = username
         state.page.$message.success(data.data.msg)
       })
       .catch(function (error) {

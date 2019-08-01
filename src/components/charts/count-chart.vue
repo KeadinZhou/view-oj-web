@@ -1,11 +1,16 @@
 <template>
-    <ve-line
-            :data="chartData"
-            :extend="extend"
-            :settings="chartSettings"
-            :legend-visible="false"
-            height="500px">
-    </ve-line>
+    <div>
+        <div class="chartTitle">
+            <b>{{(this.inputDate && this.inputDate.length===2)?('AC-Line from '+inputDate[0]+' to '+inputDate[1]):'AC-Line in last week'}}</b>
+        </div>
+        <ve-line
+                :data="chartData"
+                :extend="extend"
+                :settings="chartSettings"
+                :legend-visible="false"
+                height="500px">
+        </ve-line>
+    </div>
 </template>
 
 <script>
@@ -76,5 +81,10 @@ export default {
 </script>
 
 <style scoped>
-
+    .chartTitle{
+        text-align: center;
+        font-size: 25px;
+        margin-top: 30px;
+        margin-bottom: 30px;
+    }
 </style>

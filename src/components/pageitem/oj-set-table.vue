@@ -18,7 +18,10 @@
                     </el-table-column>
                     <el-table-column label="ID" width="200px" align="center">
                         <template slot-scope="scope">
-                            {{ scope.row.id }}&nbsp;<span style="cursor: pointer" @click="editOJID(scope.row)"><i class="el-icon-edit"></i></span>
+                            {{ scope.row.id }}&nbsp;
+                            <template v-if="userid === loguser">
+                                <span style="cursor: pointer" @click="editOJID(scope.row)"><i class="el-icon-edit"></i></span>
+                            </template>
                         </template>
                     </el-table-column>
                     <el-table-column label="Refresh" width="80px">
@@ -46,6 +49,11 @@ export default {
       isRefresh: true,
       username: '罗老嫖',
       tableData: []
+    }
+  },
+  computed: {
+    loguser: function () {
+      return (this.$store.state.user.permission === 1) ? this.userid : this.$store.state.user.userid
     }
   },
   methods: {

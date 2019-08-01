@@ -11,7 +11,7 @@
             </template>
             <div class="userBox">
                 <template v-if="this.$store.state.user.userid">
-                    <span>Welcome,{{this.$store.state.user.username}}&nbsp;</span>
+                    <span>Welcome,<use-change-box></use-change-box>&nbsp;&nbsp;</span>
                     <el-button icon="el-icon-user" @click="logout">Logout</el-button>
                 </template>
                 <template v-else>
@@ -24,8 +24,12 @@
 
 <script>
 import store from '@/vuex/store.js'
+import UserChangeBox from '@/components/pageitem/user-change-box'
 export default {
   name: 'page-nav',
+  components: {
+    'use-change-box': UserChangeBox
+  },
   data () {
     return {
     }
@@ -52,5 +56,6 @@ export default {
         top: 50%;
         transform: translate(0,-50%);
         outline:none;
+        font-size: 15px;
     }
 </style>
