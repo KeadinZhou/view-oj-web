@@ -5,7 +5,12 @@
                 placement="top-start"
                 trigger="hover"
                 :content="this.messageText">
-            <el-button slot="reference" type="primary" :icon="this.count!==0?'el-icon-loading':'el-icon-check'" circle></el-button>
+            <el-button
+                    slot="reference"
+                    :type="this.count!==0?'warning':'primary'"
+                    :icon="this.count!==0?'el-icon-loading':'el-icon-check'"
+                    circle>
+            </el-button>
         </el-popover>
     </div>
 </template>

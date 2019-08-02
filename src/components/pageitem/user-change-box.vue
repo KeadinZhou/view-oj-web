@@ -12,6 +12,7 @@
                 <div v-if="changePwd">
                     <el-input v-model="oldPwd" placeholder="Old Password" show-password class="mini-input"></el-input>
                     <el-input v-model="newPwd" placeholder="New Password" show-password class="mini-input"></el-input>
+                    <el-input v-model="newPwd2" placeholder="Confirm New Password" show-password class="mini-input"></el-input>
                 </div>
             </div>
             <div style="text-align: right; margin-right: 10px">
@@ -33,7 +34,8 @@ export default {
       name: this.$store.state.user.username,
       changePwd: false,
       oldPwd: '',
-      newPwd: ''
+      newPwd: '',
+      newPwd2: ''
     }
   },
   methods: {
@@ -44,6 +46,7 @@ export default {
       this.changePwd = false
       this.oldPwd = ''
       this.newPwd = ''
+      this.newPwd2 = ''
     },
     toSubmit () {
       this.visible = false
@@ -51,13 +54,19 @@ export default {
         this.$store.commit('modifyUserNameBySelf', this.name)
       }
       if (this.changePwd) {
-        this.$store.commit('modifyPassword', {
-          username: this.$store.state.user.userid,
-          old_password: this.oldPwd,
-          new_password: this.newPwd
-        })
+        if (this.newPwd === this.newPwd2) {
+          this.$store.commit('modifyPassword', {
+            username: this.$store.state.user.userid,
+            old_password: this.oldPwd,
+            new_password: this.newPwd
+          })
+          setTimeout(() => {
+            this.toCancel()
+          }, 500)
+        } else {
+          this.$message.error('Entered passwords differ from the another!')
+        }
       }
-      setTimeout(() => { this.toCancel() }, 500)
     }
   }
 }

@@ -64,7 +64,7 @@ export default {
         axisLabel: {
           margin: 15,
           interval: 0,
-          rotate: 30
+          rotate: 45
         }
       },
       triggerEvent: true
