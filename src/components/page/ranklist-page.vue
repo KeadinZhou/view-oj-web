@@ -1,6 +1,5 @@
 <template>
     <div>
-
         <el-card shadow="hover" class="tableBox">
             <div v-loading="loading" v-if="isRefresh">
                 <el-table :data="tableData" style="width: 100%">

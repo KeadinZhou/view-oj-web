@@ -34,7 +34,7 @@ export default {
     fixBox () {
       this.clientHeight = window.innerHeight
       this.clientWidth = window.innerWidth
-      this.$refs.pageMainBox.style.minHeight = this.clientHeight - 61 - 44 - 120 + 'px'
+      this.$refs.pageMainBox.style.minHeight = this.clientHeight - 61 - 44 - 120 + 10 + 'px'
       this.$refs.pageBox.style.height = this.clientHeight + 'px'
       this.$refs.pageBox.style.widows = this.clientWidth + 'px'
     }

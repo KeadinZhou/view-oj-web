@@ -3,6 +3,7 @@
         <el-menu :default-active="this.$route.path" class="page-nav" style="height:60px;width:100%;z-index:1000" mode="horizontal" @select="handleSelect" router>
             <el-menu-item index="/" class="nav-item" route="/">Home</el-menu-item>
             <el-menu-item index="/ranklist" class="nav-item" route="/ranklist">Ranklist</el-menu-item>
+            <el-menu-item index="/monitor" class="nav-item" route="/monitor">Monitor</el-menu-item>
             <template v-if="this.$store.state.user.userid">
                 <el-menu-item :index="'/user/'+$store.state.user.userid" class="nav-item" :route="'/user/'+$store.state.user.userid">Userinfo</el-menu-item>
                 <template v-if="this.$store.state.user.permission === 1">

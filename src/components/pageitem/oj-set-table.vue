@@ -26,7 +26,7 @@
                     </el-table-column>
                     <el-table-column label="Refresh" width="80px">
                         <template slot-scope="scope">
-                            <el-tooltip effect="dark" :content="'Refresh '+scope.row.oj+' for '+scope.row.username" placement="right">
+                            <el-tooltip effect="dark" :content="'Refresh '+scope.row.oj+' for '+scope.row.userid" placement="right">
                                 <span style="cursor: pointer;margin-left: 20px" @click="refreshOJ(scope.row)"><i class="el-icon-refresh"></i></span>
                             </el-tooltip>
                         </template>

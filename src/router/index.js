@@ -6,6 +6,7 @@ import LoginPage from '@/components/page/login-page'
 import RanklistPage from '@/components/page/ranklist-page'
 import UserinfoPage from '@/components/page/userinfo-page'
 import Error404Page from '@/components/page/error404-page'
+import MonitorPage from '@/components/page/monitor-page'
 
 Vue.use(Router)
 
@@ -43,6 +44,13 @@ export default new Router({
       path: '/user/:userid',
       name: 'userinfo-page',
       component: UserinfoPage,
+      meta: {
+        title: 'Userinfo - viewOJ'
+      }
+    }, {
+      path: '/monitor',
+      name: 'monitor-page',
+      component: MonitorPage,
       meta: {
         title: 'Userinfo - viewOJ'
       }
