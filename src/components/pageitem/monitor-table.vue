@@ -7,7 +7,7 @@
                         {{ scope.row.userid }}
                     </template>
                 </el-table-column>
-                <el-table-column label="Name" align="center" width="90" prop="name" sortable>
+                <el-table-column label="Name" align="center" width="90" prop="name">
                     <template slot-scope="scope">
                         {{ scope.row.username }}
                     </template>

@@ -52,7 +52,7 @@ export default new Router({
       name: 'monitor-page',
       component: MonitorPage,
       meta: {
-        title: 'Userinfo - viewOJ'
+        title: 'Monitor - viewOJ'
       }
     }, {
       path: '*',
