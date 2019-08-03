@@ -21,7 +21,8 @@
                         <el-input type="password"
                                   v-model="FormData.password"
                                   placeholder="Please enter your password."
-                                  prefix-icon="el-icon-key">
+                                  prefix-icon="el-icon-key"
+                                  @keyup.enter.native="submitForm('FormData')">
                         </el-input>
                     </el-form-item>
                     <el-form-item>

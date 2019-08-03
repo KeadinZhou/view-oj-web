@@ -27,7 +27,24 @@
                 <b>The Monitor of The Problem Set</b>
             </div>
             <div class="centerBox" v-if="this.$store.state.user.permission === 1">
-                <el-button type="primary" icon="el-icon-plus" circle @click="addBoxShow = true"></el-button>
+                <el-button-group>
+                    <el-tooltip effect="dark" content="Add New Problem Set" placement="top">
+                        <el-button icon="el-icon-plus" size="medium" @click="addBoxShow = true" round></el-button>
+                    </el-tooltip>
+                    <template v-if="isAdminMode">
+                        <el-tooltip effect="dark" content="Close Admin Mode" placement="top">
+                            <el-button icon="el-icon-unlock" size="medium" @click="isAdminMode = false" round type="danger"></el-button>
+                        </el-tooltip>
+                    </template>
+                    <template v-else>
+                        <el-tooltip effect="dark" content="Open Admin Mode" placement="top">
+                            <el-button icon="el-icon-lock" size="medium" @click="isAdminMode = true" round></el-button>
+                        </el-tooltip>
+                    </template>
+                    <el-tooltip effect="dark" content="Refresh All Data" placement="top">
+                        <el-button icon="el-icon-refresh" size="medium" @click="$store.commit('updateAllData')" round></el-button>
+                    </el-tooltip>
+                </el-button-group>
             </div>
             <el-collapse accordion @change="openItem">
                 <template v-for="item in SetList">
@@ -35,12 +52,32 @@
                         <template slot="title">
                             <i class="el-icon-collection-tag" style="margin-left: 10px;color: #409EFF"></i>
                             <el-divider direction="vertical"></el-divider>
+                            <template v-if="isAdminMode">
+                                <el-popover placement="top" title="Rename" trigger="hover" v-model="item.renameShow" width="400">
+                                    <i class="el-icon-edit" slot="reference" style="color: #E6A23C"></i>
+                                    <el-input v-model="item.name" prefix-icon="el-icon-edit"></el-input>
+                                    <div style="text-align: right; margin-top: 10px">
+                                        <el-button size="mini" type="text" @click="item.renameShow = false" style="color: black">Cancel</el-button>
+                                        <el-button type="warning" size="mini" @click="renameSet(item); item.renameShow = false">Submit</el-button>
+                                    </div>
+                                </el-popover>
+                                <el-divider direction="vertical"></el-divider>
+                                <el-popover placement="top" trigger="hover" v-model="item.delShow">
+                                    <i class="el-icon-delete" slot="reference" style="color: #F56C6C"></i>
+                                    <p style="text-align: center">Are you sure you want to delete <br/><br/><b>{{item.name}}</b> ?<br/></p>
+                                    <div style="text-align: right; margin-top: 10px">
+                                        <el-button size="mini" type="text" @click="item.delShow = false" style="color: black">Cancel</el-button>
+                                        <el-button type="danger" size="mini" @click="delSet(item.id); item.delShow = false">Delete</el-button>
+                                    </div>
+                                </el-popover>
+                                <el-divider direction="vertical"></el-divider>
+                            </template>
                             {{ item.name }}
                         </template>
                         <div>
                             <template v-if="activeNames === item.id">
                                 <template v-if="isLoading">
-                                    <i class="el-icon-loading" style="font-size: 30px"></i>
+                                    <i class="el-icon-loading"></i> Loading...
                                 </template>
                                 <template v-else>
                                     <monitor-table :proData="proData" :proList="proList"></monitor-table>
@@ -69,7 +106,8 @@ export default {
       ojList: [],
       addBoxShow: false,
       newSetTitle: '',
-      problemSet: []
+      problemSet: [],
+      isAdminMode: false
     }
   },
   components: {
@@ -104,8 +142,11 @@ export default {
         })
     },
     openItem (activeNames) {
-      if (!activeNames) return
       this.activeNames = activeNames
+      if (!activeNames) {
+        this.proData = []
+        return
+      }
       this.isLoading = true
       this.getTableData(activeNames)
     },
@@ -139,13 +180,17 @@ export default {
         this.problemSet.push({
           oj: null,
           pid: '',
-          id: null
+          id: null,
+          delShow: false,
+          renameShow: false
         })
       } else {
         this.problemSet.push({
           oj: this.problemSet[num - 1].oj,
           pid: this.problemSet[num - 1].pid,
-          id: null
+          id: null,
+          delShow: false,
+          renameShow: false
         })
       }
     },
@@ -168,6 +213,7 @@ export default {
         .then(data => {
           that.$message.success(data.data.msg)
           that.initProblemSet()
+          that.getList()
         })
         .catch(function (error) {
           if (error.response) {
@@ -213,6 +259,35 @@ export default {
         that.$message.error('ProblemSet cannot be empty!')
       }
       that.getProbID(0)
+    },
+    delSet (setId) {
+      const that = this
+      that.$http.post(this.api + '/v1/problem_set/delete_problem_set', {problem_set_id: setId})
+        .then(data => {
+          that.$message.success(data.data.msg)
+          that.getList()
+        })
+        .catch(function (error) {
+          if (error.response) {
+            that.$message.error(error.response.data.msg)
+          }
+        })
+    },
+    renameSet (SET) {
+      const that = this
+      that.$http.post(this.api + '/v1/problem_set/modify_problem_set', {
+        problem_set_id: SET.id,
+        problem_set_name: SET.name
+      })
+        .then(data => {
+          that.$message.success(data.data.msg)
+          that.getList()
+        })
+        .catch(function (error) {
+          if (error.response) {
+            that.$message.error(error.response.data.msg)
+          }
+        })
     }
   },
   created () {

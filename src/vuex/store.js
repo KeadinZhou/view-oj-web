@@ -246,6 +246,17 @@ var mutations = {
           state.page.$message.error(error.response.data.msg)
         }
       })
+  },
+  refreshUserRating (state, username) {
+    state.page.$http.post(api + '/v1/task/refresh_user_rating', {username: username})
+      .then(data => {
+        state.page.$message.success(data.data.msg)
+      })
+      .catch(function (error) {
+        if (error.response) {
+          state.page.$message.error(error.response.data.msg)
+        }
+      })
   }
 }
 

@@ -21,6 +21,9 @@
                     <el-table-column label="Rating" align="center">
                         <template slot-scope="scope">
                             {{ scope.row.rating }}
+                            <el-tooltip effect="dark" :content="'Refresh rating for '+scope.row.nickname" placement="right">
+                                <span style="cursor: pointer;margin-left: 5px" @click="$store.commit('refreshUserRating',scope.row.username)"><i class="el-icon-refresh"></i></span>
+                            </el-tooltip>
                         </template>
                     </el-table-column>
                     <el-table-column label="Detail" width="70px">

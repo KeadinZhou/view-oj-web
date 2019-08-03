@@ -3,7 +3,7 @@
         <p>
             <el-divider></el-divider>
             Copyright &copy; 2017-{{ new Date().getFullYear() }} ZUCC-ACM-LAB. All Rights Reserved.<br>
-            Powered by <el-link type="primary" href="https://github.com/taoting1234/oj_spider">Taoting</el-link> & <el-link type="primary" href="https://github.com/KeadinZhou">Keadin</el-link>
+            Powered by <el-link type="primary" href="https://github.com/taoting1234/oj_spider">Taoting</el-link> & <el-link type="primary" href="https://github.com/KeadinZhou/ViewOJ">Keadin</el-link>
         </p>
     </div>
 </template>

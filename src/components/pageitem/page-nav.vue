@@ -16,7 +16,7 @@
                     <el-button icon="el-icon-user" @click="logout">Logout</el-button>
                 </template>
                 <template v-else>
-                    <el-button type="primary" icon="el-icon-user" @click="$router.push('login')">Login</el-button>
+                    <el-button type="primary" icon="el-icon-user" @click="$router.push('/login')">Login</el-button>
                 </template>
             </div>
         </el-menu>
