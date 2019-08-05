@@ -8,7 +8,8 @@
                 :extend="extend"
                 :settings="chartSettings"
                 :legend-visible="false"
-                height="500px">
+                height="500px"
+                v-loading="loading">
         </ve-line>
     </div>
 </template>
