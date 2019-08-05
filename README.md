@@ -1,6 +1,12 @@
-# view-oj
+# view-oj-web
 
-> The ViewOJ System for ZUCC-ACM-LAB.
+> The web project of viewOJ System for ZUCC-ACM-LAB.
+>
+> The backend project see [@taoting1234/view-oj-backend](https://github.com/taoting1234/view-oj-backend).
+>
+> The interface documentation see [here](https://www.showdoc.cc/417895562132382).
+>
+> The [demo](http://viewoj.kealine.top/).
 
 ## Build Setup
 
@@ -27,4 +33,10 @@ npm run e2e
 npm test
 ```
 
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+## Primary dependency library
+
+* Framework : [Vue.js](https://cn.vuejs.org/v2/guide/)
+* Router : [Vue Router](https://router.vuejs.org/zh/)
+* State Management : [Vuex ](https://vuex.vuejs.org/zh/)
+* UI : [elementUI](https://element.eleme.cn/#/zh-CN/)
+* Chart : [v-charts](https://v-charts.js.org/#/)
