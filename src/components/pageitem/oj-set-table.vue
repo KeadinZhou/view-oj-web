@@ -18,9 +18,9 @@
                     </el-table-column>
                     <el-table-column label="ID" width="200px" align="center">
                         <template slot-scope="scope">
-                            {{ scope.row.id }}&nbsp;
-                            <template v-if="userid === loguser">
-                                <span style="cursor: pointer" @click="editOJID(scope.row)"><i class="el-icon-edit"></i></span>
+                            {{ scope.row.id }}
+                            <template v-if="(userid === $store.state.user.userid && !scope.row.id) || $store.state.user.permission === 1">
+                                &nbsp;<span style="cursor: pointer" @click="editOJID(scope.row)"><i class="el-icon-edit"></i></span>
                             </template>
                         </template>
                     </el-table-column>

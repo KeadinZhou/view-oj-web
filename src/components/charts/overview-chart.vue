@@ -76,7 +76,7 @@ export default {
       },
       loading: false,
       chartTitle: {
-        text: 'Training status chart of Grade 20' + this.grade,
+        text: 'Training status chart of Grade ' + this.grade,
         subtext: this.daterange && this.daterange[0] ? ('The data from ' + this.daterange[0] + ' to ' + this.daterange[1]) : ('Last week\'s data'),
         left: 'center',
         right: 'center',
@@ -91,7 +91,7 @@ export default {
       this.loading = true
       for (var i in this.$store.state.OverviewData) {
         var item = this.$store.state.OverviewData[i]
-        if (item.userid.substr(1, 2) === this.grade) {
+        if (item.group === this.grade) {
           this.chartData.rows.push({'User': item.userid + ' - ' + item.username, 'Accept': item.number})
         }
       }

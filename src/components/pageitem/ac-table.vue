@@ -8,7 +8,7 @@
                 <el-table :data="tableData" style="width: 100%">
                     <el-table-column label="Problem" align="center">
                         <template slot-scope="scope">
-                            {{ scope.row.oj_name }}-{{ scope.row.problem_pid }}
+                            <el-link :href="scope.row.problem_url" target="_blank" :underline="false">{{ scope.row.oj_name }}-{{ scope.row.problem_pid }}</el-link>
                         </template>
                     </el-table-column>
                     <el-table-column label="Rating" align="center">

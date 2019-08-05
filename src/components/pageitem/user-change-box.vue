@@ -2,7 +2,7 @@
     <span>
         <el-popover placement="top" v-model="visible" width="252">
             <div class="itemBox">
-                <el-checkbox v-model="changeName">I want to change my name.</el-checkbox>
+                <el-checkbox v-model="changeName" disabled>I want to change my name.</el-checkbox>
                 <div v-if="changeName">
                     <el-input v-model="name" placeholder="New Name" class="mini-input"></el-input>
                 </div>

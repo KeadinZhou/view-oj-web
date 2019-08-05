@@ -1,5 +1,8 @@
 <template>
     <div class="task-box">
+        <el-dialog :visible.sync="isShow" :append-to-body="true" width="360px">
+            <iframe name = "child" id = "child" :src="'http://kealine.top/almanac/?username='+$store.state.user.userid" width="320px" height="650px" frameborder="0" scrolling="no"></iframe>
+        </el-dialog>
         <el-popover
                 class="messageClass"
                 placement="top-start"
@@ -9,6 +12,7 @@
                     slot="reference"
                     :type="this.count!==0?'warning':'primary'"
                     :icon="this.count!==0?'el-icon-loading':'el-icon-check'"
+                    @click="bottonClick"
                     circle>
             </el-button>
         </el-popover>
@@ -21,7 +25,9 @@ export default {
   data () {
     return {
       count: 0,
-      api: this.$store.state.api
+      api: this.$store.state.api,
+      clickCount: 0,
+      isShow: false
     }
   },
   computed: {
@@ -41,6 +47,12 @@ export default {
       setTimeout(() => {
         this.getData()
       }, 2000)
+    },
+    bottonClick () {
+      this.clickCount++
+      if (this.clickCount % 5 === 0 && this.$store.state.user.userid) {
+        this.isShow = true
+      }
     }
   },
   created () {

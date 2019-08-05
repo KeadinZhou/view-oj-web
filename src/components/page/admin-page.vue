@@ -14,18 +14,23 @@
             </div>
         </div>
         <div v-loading="loading" v-if="isRefresh">
-            <el-table :data="tableData" style="width: 100%">
-                <el-table-column label="Userid">
+            <el-table :data="tableData" style="width: 100%" :default-sort = "{prop: 'group', order: 'descending'}">
+                <el-table-column label="Userid" width="150" prop="userid" sortable>
                     <template slot-scope="scope">
                         {{ scope.row.username }}
                     </template>
                 </el-table-column>
-                <el-table-column label="Name">
+                <el-table-column label="Name" align="center">
                     <template slot-scope="scope">
                         {{ scope.row.nickname }}&nbsp;<span style="cursor: pointer" @click="editName(scope.row)"><i class="el-icon-edit"></i></span>
                     </template>
                 </el-table-column>
-                <el-table-column label="Recording">
+                <el-table-column label="Group" align="center" prop="group" sortable>
+                    <template slot-scope="scope">
+                        {{ scope.row.group }}&nbsp;<span style="cursor: pointer" @click="editGroup(scope.row)"><i class="el-icon-edit"></i></span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="Recording" align="center">
                     <template slot-scope="scope">
                         <el-switch
                                 v-model="scope.row.status"
@@ -35,7 +40,7 @@
                         </el-switch>
                     </template>
                 </el-table-column>
-                <el-table-column label="Admin">
+                <el-table-column label="Admin" align="center">
                     <template slot-scope="scope">
                         <el-switch
                                 v-model="scope.row.permission"
@@ -45,7 +50,7 @@
                         </el-switch>
                     </template>
                 </el-table-column>
-                <el-table-column label="Detail" width="70px">
+                <el-table-column label="Detail" width="70">
                     <template slot-scope="scope">
                         <el-button
                                 icon="el-icon-s-data"
@@ -76,7 +81,8 @@ export default {
         username: row.username,
         nickname: row.nickname,
         permission: row.permission,
-        status: row.status
+        status: row.status,
+        group: row.group
       })
     },
     editName (row) {
@@ -86,6 +92,16 @@ export default {
         inputValue: row.nickname
       }).then(({ value }) => {
         row.nickname = value
+        this.switchChange(row)
+      })
+    },
+    editGroup (row) {
+      this.$prompt('Input the group of ' + row.username, 'Edit', {
+        confirmButtonText: 'Submit',
+        cancelButtonText: 'Cancel',
+        inputValue: row.group
+      }).then(({ value }) => {
+        row.group = value
         this.switchChange(row)
       })
     },

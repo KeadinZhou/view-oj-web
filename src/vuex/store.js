@@ -82,14 +82,19 @@ var mutations = {
           state.OverviewData.push({
             userid: item.username,
             username: item.nickname,
-            number: item.accept_problem_count
+            number: item.accept_problem_count,
+            group: item.group
           })
         }
         for (i = 0; i < state.OverviewData.length; i++) {
-          var tmp = state.OverviewData[i].userid.substr(1, 2)
+          var tmp = state.OverviewData[i].group
           state.OverviewGrade.add(tmp)
         }
         state.OverviewGrade = Array.from(state.OverviewGrade)
+        state.OverviewGrade.sort(function (a, b) {
+          if (a < b) return 1
+          else return -1
+        })
       })
       .catch(function (error) {
         if (error.response) {
@@ -144,7 +149,7 @@ var mutations = {
   modifyUserInfo (state, data) {
     state.page.$http.post(api + '/v1/user/modify_user_info', data)
       .then(data => {
-        state.page.$message.success(data.msg)
+        state.page.$message.success(data.data.msg)
       })
       .catch(function (error) {
         if (error.response) {
@@ -156,7 +161,7 @@ var mutations = {
     state.page.$http.post(api + '/v1/user/create_user', data)
       .then(data => {
         state.page.$store.commit('updateUserlist')
-        state.page.$message.success(data.msg)
+        state.page.$message.success(data.data.msg)
       })
       .catch(function (error) {
         if (error.response) {

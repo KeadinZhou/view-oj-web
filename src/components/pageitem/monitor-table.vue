@@ -21,7 +21,7 @@
                     <el-table-column align="center" :key="index" min-width="35">
                         <template slot="header" slot-scope="scope">
                             <el-tooltip class="item" effect="dark" :content="problem.oj_name+'-'+problem.problem_pid" placement="top">
-                                <b>{{String.fromCharCode((65+index))}}</b>
+                                <el-link :href="problem.problem_url" target="_blank" :underline="false" style="color: gray"><b>{{String.fromCharCode((65+index))}}</b></el-link>
                             </el-tooltip>
                         </template>
                         <template slot-scope="scope">
