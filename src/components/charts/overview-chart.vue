@@ -75,7 +75,7 @@ export default {
       click: function (e) {
         var name = e.name
         var username = name.substring(0, name.indexOf(' '))
-        that.$router.push('/user/' + username)
+        that.$router.push('/user/' + username + '?part=problem')
       }
     }
     return {

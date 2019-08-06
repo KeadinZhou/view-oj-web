@@ -53,7 +53,7 @@ export default {
   },
   methods: {
     gotoDetail (row) {
-      this.$router.push('/user/' + row.username)
+      this.$router.push('/user/' + row.username + '?part=rating')
     },
     current_change (currentPage) {
       this.getData(currentPage)

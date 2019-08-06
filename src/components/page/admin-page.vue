@@ -122,7 +122,7 @@ export default {
       this.$store.commit('updateAllData')
     },
     gotoDetail (row) {
-      this.$router.push('/user/' + row.username)
+      this.$router.push('/user/' + row.username + '?part=page-top')
     },
     reFreshChart () {
       this.isRefresh = false

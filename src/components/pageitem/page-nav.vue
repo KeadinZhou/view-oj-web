@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div id="page-top">
         <el-menu :default-active="this.$route.path" class="page-nav" style="height:60px;width:100%;z-index:1000" mode="horizontal" @select="handleSelect" router>
             <el-menu-item index="/" class="nav-item" route="/">Home</el-menu-item>
             <el-menu-item index="/ranklist" class="nav-item" route="/ranklist">Ranklist</el-menu-item>

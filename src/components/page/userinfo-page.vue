@@ -1,10 +1,12 @@
 <template>
     <div>
         <userall-chart :userid="this.pageid"></userall-chart>
+        <a id="rating"></a>
         <el-divider></el-divider>
         <rating-chart :userid="this.pageid"></rating-chart>
         <el-divider></el-divider>
         <oj-set-table :userid="this.pageid"></oj-set-table>
+        <a id="problem"></a>
         <el-divider></el-divider>
         <ac-detail-part :userid="this.pageid"></ac-detail-part>
     </div>
@@ -28,8 +30,20 @@ export default {
       pageid: ''
     }
   },
+  methods: {
+    gotoPart (part) {
+      setTimeout(() => {
+        document.querySelector('#' + part).scrollIntoView({behavior: 'smooth'})
+      }, 500)
+    }
+  },
   created () {
     this.pageid = this.$route.params.userid
+  },
+  mounted () {
+    if (this.$route.query.part) {
+      this.gotoPart(this.$route.query.part)
+    }
   }
 }
 </script>
