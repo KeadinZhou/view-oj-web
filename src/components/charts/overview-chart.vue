@@ -7,6 +7,7 @@
                 :legend-visible="false"
                 :title="chartTitle"
                 :mark-line="markLine"
+                :events="chartEvents"
                 width="100%"
                 height="800px">
         </ve-histogram>
@@ -21,6 +22,7 @@ export default {
     daterange: Array
   },
   data () {
+    var that = this
     this.markLine = {
       data: [
         {
@@ -69,6 +71,13 @@ export default {
       },
       triggerEvent: true
     }
+    this.chartEvents = {
+      click: function (e) {
+        var name = e.name
+        var username = name.substring(0, name.indexOf(' '))
+        that.$router.push('/user/' + username)
+      }
+    }
     return {
       chartData: {
         columns: ['User', 'Accept'],
@@ -89,6 +98,7 @@ export default {
   methods: {
     getData () {
       this.loading = true
+      this.chartData.rows = []
       for (var i in this.$store.state.OverviewData) {
         var item = this.$store.state.OverviewData[i]
         if (item.group === this.grade) {
