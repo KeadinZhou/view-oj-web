@@ -35,14 +35,22 @@ export default {
       setTimeout(() => {
         document.querySelector('#' + part).scrollIntoView({behavior: 'smooth'})
       }, 500)
+    },
+    pageInit () {
+      this.pageid = this.$route.params.userid
     }
   },
   created () {
-    this.pageid = this.$route.params.userid
+    this.pageInit()
   },
   mounted () {
     if (this.$route.query.part) {
       this.gotoPart(this.$route.query.part)
+    }
+  },
+  watch: {
+    '$route' () {
+      this.pageInit()
     }
   }
 }

@@ -119,6 +119,11 @@ export default {
   },
   created () {
     this.getData(1)
+  },
+  watch: {
+    userid: function () {
+      this.getData(1)
+    }
   }
 }
 </script>
