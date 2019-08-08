@@ -5,8 +5,9 @@ import AdminPage from '@/components/page/admin-page'
 import LoginPage from '@/components/page/login-page'
 import RanklistPage from '@/components/page/ranklist-page'
 import UserinfoPage from '@/components/page/userinfo-page'
-import Error404Page from '@/components/page/error404-page'
 import MonitorPage from '@/components/page/monitor-page'
+import Error404Page from '@/components/page/error404-page'
+import Error401Page from '@/components/page/error401-page'
 
 Vue.use(Router)
 
@@ -53,6 +54,13 @@ export default new Router({
       component: MonitorPage,
       meta: {
         title: 'Monitor - viewOJ'
+      }
+    }, {
+      path: '/error401',
+      name: 'error401-page',
+      component: Error401Page,
+      meta: {
+        title: 'Error - viewOJ'
       }
     }, {
       path: '*',

@@ -11,7 +11,8 @@ var state = {
     userid: '',
     username: '',
     permission: '',
-    status: ''
+    status: '',
+    isUpdated: false
   },
   OverviewData: [],
   OverviewGrade: [],
@@ -34,9 +35,12 @@ var mutations = {
         state.user.username = data.data.data.nickname
         state.user.permission = data.data.data.permission
         state.user.status = data.data.data.status
+        state.user.isUpdated = true
       })
       .catch(function (error) {
-        if (error.response) {}
+        if (error.response) {
+          state.user.isUpdated = true
+        }
       })
   },
   login (state, data) {

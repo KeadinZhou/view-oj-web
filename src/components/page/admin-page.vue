@@ -156,10 +156,23 @@ export default {
       } else {
         this.initData()
       }
+    },
+    permissionCheck () {
+      if (this.$store.state.user.isUpdated) {
+        if (this.$store.state.user.permission !== 1) {
+          this.$router.replace('/error401')
+        } else {
+          this.getData()
+        }
+      } else {
+        setTimeout(() => {
+          this.permissionCheck()
+        }, 100)
+      }
     }
   },
   created () {
-    this.getData()
+    this.permissionCheck()
   },
   computed: {
     userlistSize () {

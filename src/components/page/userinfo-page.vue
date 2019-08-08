@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-if="this.pageid">
         <userall-chart :userid="this.pageid"></userall-chart>
         <a id="rating"></a>
         <el-divider></el-divider>
@@ -38,10 +38,23 @@ export default {
     },
     pageInit () {
       this.pageid = this.$route.params.userid
+    },
+    permissionCheck () {
+      if (this.$store.state.user.isUpdated) {
+        if (!this.$store.state.user.username) {
+          this.$router.replace('/error401')
+        } else {
+          this.pageInit()
+        }
+      } else {
+        setTimeout(() => {
+          this.permissionCheck()
+        }, 100)
+      }
     }
   },
   created () {
-    this.pageInit()
+    this.permissionCheck()
   },
   mounted () {
     if (this.$route.query.part) {
@@ -50,7 +63,7 @@ export default {
   },
   watch: {
     '$route' () {
-      this.pageInit()
+      this.permissionCheck()
     }
   }
 }
