@@ -10,9 +10,9 @@
                     range-separator="to"
                     start-placeholder="Begin Date"
                     end-placeholder="End Date"
-                    :picker-options="pickerOptions">
+                    :picker-options="pickerOptions"
+                    @change="changeOverviewDate">
             </el-date-picker>
-            <el-button icon="el-icon-search" plain @click="changeOverviewDate"></el-button>
         </div>
         <template v-if="isRefresh">
             <overview-chart v-for="item in this.$store.state.OverviewGrade" :grade="item" :daterange="inputDate" :key="item"></overview-chart>
@@ -72,6 +72,14 @@ export default {
             start.setTime(start.getTime() - 3600 * 1000 * 24 * 365)
             picker.$emit('pick', [start, end])
           }
+        }, {
+          text: '最近两年',
+          onClick (picker) {
+            const end = new Date()
+            const start = new Date()
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 365 * 2)
+            picker.$emit('pick', [start, end])
+          }
         }]
       }
     }
@@ -97,7 +105,7 @@ export default {
 <style scoped>
     .dataBox{
         position: relative;
-        width: 411px;
+        width: 350px;
         left: 50%;
         transform: translate(-50%,0);
         margin-top: 50px;

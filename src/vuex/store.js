@@ -65,8 +65,11 @@ var mutations = {
         state.user = {
           userid: '',
           username: '',
-          permission: ''
+          permission: '',
+          status: '',
+          isUpdated: false
         }
+        state.page.$store.commit('updateUser')
         state.page.$message.success(data.data.msg)
       })
       .catch(function (error) {
