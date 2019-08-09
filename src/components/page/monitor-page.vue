@@ -17,6 +17,9 @@
                     </div>
                 </template>
             </div>
+            <template v-if="showProgress">
+                <el-progress :text-inside="true" :stroke-width="26" :percentage="percentage"></el-progress>
+            </template>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="initProblemSet">Cancel</el-button>
                 <el-button type="primary" @click="submitAdd">Submit</el-button>
@@ -107,7 +110,9 @@ export default {
       addBoxShow: false,
       newSetTitle: '',
       problemSet: [],
-      isAdminMode: false
+      isAdminMode: false,
+      showProgress: false,
+      percentage: 10
     }
   },
   components: {
@@ -173,6 +178,8 @@ export default {
       this.newSetTitle = ''
       this.problemSet = []
       this.addBoxShow = false
+      this.showProgress = false
+      this.percentage = 0
     },
     addProblem () {
       var num = this.problemSet.length
@@ -187,7 +194,7 @@ export default {
       } else {
         this.problemSet.push({
           oj: this.problemSet[num - 1].oj,
-          pid: this.problemSet[num - 1].pid,
+          pid: (Number(this.problemSet[num - 1].pid) + 1) + '',
           id: null,
           delShow: false,
           renameShow: false
@@ -223,9 +230,8 @@ export default {
     },
     getProbID (index) {
       const that = this
+      that.showProgress = true
       if (index >= that.problemSet.length) {
-        console.log('commit')
-        console.log(that.problemSet)
         that.submitCreat()
         return
       }
@@ -235,6 +241,7 @@ export default {
       })
         .then(data => {
           that.problemSet[index].id = data.data.data
+          that.percentage = (index + 1) / that.problemSet.length * 100
           that.getProbID(index + 1)
         })
         .catch(function (error) {
