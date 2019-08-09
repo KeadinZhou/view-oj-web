@@ -61,7 +61,6 @@ export default {
       series: {
         label: { show: true, position: 'top' },
         barMaxWidth: 70,
-        barMinHeight: 5,
         itemStyle: {
           normal: {
             color: '#409eff'
@@ -69,9 +68,9 @@ export default {
         }
       },
       xAxis: {
+        triggerEvent: true,
         axisLabel: {
           margin: 15,
-          interval: 0,
           rotate: 45
         }
       },
@@ -82,7 +81,7 @@ export default {
     }
     this.chartEvents = {
       click: function (e) {
-        var name = e.name
+        var name = e.componentType === 'xAxis' ? e.value : e.name
         var username = name.substring(0, name.indexOf(' '))
         if (!username) return
         that.$router.push('/user/' + username + '?part=problem')
@@ -93,17 +92,7 @@ export default {
         columns: ['User', 'Accept'],
         rows: []
       },
-      loading: false,
-      chartTitle: {
-        text: 'Training status chart of Grade ' + this.grade,
-        subtext: this.daterange && this.daterange[0] ? ('The data from ' + this.daterange[0] + ' to ' + this.daterange[1]) : ('Last week\'s data'),
-        left: 'center',
-        right: 'center',
-        textStyle: {
-          fontSize: 25
-        },
-        padding: [0, 0, 20, 0]
-      }
+      loading: false
     }
   },
   methods: {
@@ -131,7 +120,7 @@ export default {
     }
     .chartTitle{
         text-align: center;
-        font-size: 28px;
+        font-size: 25px;
         margin-top: 30px;
     }
     .chartSubTitle{
