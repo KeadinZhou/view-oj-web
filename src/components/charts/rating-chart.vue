@@ -20,6 +20,7 @@ export default {
     userid: String
   },
   data () {
+    var that = this
     this.markPoint = {
       symbolSize: 35,
       symbol: 'pin',
@@ -129,6 +130,11 @@ export default {
             }
           ]]
         }
+      },
+      tooltip: {
+        formatter: function (params) {
+          return params[0].data[0] + '<br />' + 'Rating: ' + params[0].data[1] + ' (+' + that.chartData.rows[params[0].dataIndex].Delta + ')'
+        }
       }
     }
     this.colors = ['#ddc44e', '#ddc44e', '#ddc44e', '#ddc44e']
@@ -175,8 +181,9 @@ export default {
             var item = data.data.data[i]
             rating += item.add_rating
             this.chartData.rows.push({
-              'Date': item.date,
-              'Rating': rating
+              Date: item.date,
+              Rating: rating,
+              Delta: item.add_rating
             })
           }
           that.reFreshChart()

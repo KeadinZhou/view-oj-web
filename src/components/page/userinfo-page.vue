@@ -33,7 +33,7 @@ export default {
   methods: {
     gotoPart (part) {
       setTimeout(() => {
-        document.querySelector('#' + part).scrollIntoView({behavior: 'smooth'})
+        document.querySelector('#' + part).scrollIntoView({behavior: 'smooth', block: 'start'})
       }, 500)
     },
     pageInit () {
