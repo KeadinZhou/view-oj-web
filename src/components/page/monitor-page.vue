@@ -241,7 +241,7 @@ export default {
       })
         .then(data => {
           that.problemSet[index].id = data.data.data
-          that.percentage = (index + 1) / that.problemSet.length * 100
+          that.percentage = parseInt((index + 1) / that.problemSet.length * 100)
           that.getProbID(index + 1)
         })
         .catch(function (error) {
