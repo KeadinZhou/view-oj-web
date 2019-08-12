@@ -1,5 +1,10 @@
 <template>
     <div>
+        <div style="margin: 10px">
+            <div style="float: right;margin: 12px;">
+                <el-checkbox v-model="showAll">Show All User</el-checkbox>
+            </div>
+        </div>
         <el-card shadow="hover" class="tableBox">
             <div v-loading="loading" v-if="isRefresh">
                 <el-table :data="tableData" style="width: 100%">
@@ -52,7 +57,8 @@ export default {
     return {
       loading: false,
       isRefresh: true,
-      tableData: []
+      tableData: [],
+      showAll: false
     }
   },
   methods: {
@@ -86,7 +92,13 @@ export default {
       var that = this
       that.$http.post(api + '/v1/data/get_rating_rank_list')
         .then(data => {
-          that.tableData = data.data.data
+          // that.tableData = data.data.data
+          that.tableData = []
+          for (var item of data.data.data) {
+            if (item.status === 1 || that.showAll) {
+              that.tableData.push(item)
+            }
+          }
           that.reFreshChart()
         })
         .catch(function (error) {
@@ -98,6 +110,11 @@ export default {
   },
   created () {
     this.getData()
+  },
+  watch: {
+    showAll: function () {
+      this.getData()
+    }
   }
 }
 </script>
