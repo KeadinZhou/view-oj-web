@@ -67,7 +67,7 @@ export default {
         dangerouslyUseHTMLString: true
       }).then(({ value }) => {
         var tmp = value.split('::')
-        if (tmp.length === 1 && row.oj === 'pintia') {
+        if (tmp.length === 1 && row.oj === 'pintia' && value !== '') {
           that.$message.error('pintia need set password, use username::password to set password!')
         } else {
           row.id = ''
