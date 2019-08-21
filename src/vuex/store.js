@@ -195,7 +195,8 @@ var mutations = {
     state.page.$http.post(api + '/v1/user/modify_oj_username', {
       username: data.userid,
       oj_id: data.ojid,
-      oj_username: data.id
+      oj_username: data.id,
+      oj_password: data.pwd
     })
       .then(data => {
         state.page.$message.success(data.data.msg)

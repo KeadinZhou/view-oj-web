@@ -58,17 +58,29 @@ export default {
   },
   methods: {
     editOJID (row) {
-      this.$prompt('Input the ID of ' + row.oj, 'Modify', {
+      const that = this
+      var pintiaMsg = (row.oj === 'pintia' ? ' <b>(username::password)<b/>' : '')
+      that.$prompt('Input the ID of ' + row.oj + pintiaMsg, 'Modify', {
         confirmButtonText: 'Submit',
         cancelButtonText: 'Cancel',
-        inputValue: row.id
+        inputValue: row.id,
+        dangerouslyUseHTMLString: true
       }).then(({ value }) => {
-        row.id = value
-        this.$store.commit('modifyOJID', {
-          userid: row.userid,
-          ojid: row.ojid,
-          id: row.id
-        })
+        var tmp = value.split('::')
+        if (tmp.length === 1 && row.oj === 'pintia') {
+          that.$message.error('pintia need set password, use username::password to set password!')
+        } else {
+          row.id = ''
+          row.pwd = ''
+          if (tmp.length >= 1) row.id = tmp[0]
+          if (tmp.length >= 2) row.pwd = tmp[1]
+          this.$store.commit('modifyOJID', {
+            userid: row.userid,
+            ojid: row.ojid,
+            id: row.id,
+            pwd: row.pwd
+          })
+        }
       })
     },
     refreshOJ (row) {
@@ -93,7 +105,8 @@ export default {
             userid: this.userid,
             ojid: item.oj_id,
             oj: item.oj_name,
-            id: item.oj_username
+            id: item.oj_username,
+            pwd: ''
           })
         }
       } else {
