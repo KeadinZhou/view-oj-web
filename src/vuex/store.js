@@ -3,7 +3,7 @@ import Vuex from 'vuex'
 
 Vue.use(Vuex)
 
-const api = 'http://oj-api.newitd.com'
+const api = 'http://view-oj-api.newitd.com'
 var state = {
   page: null,
   api: api,
