@@ -24,6 +24,13 @@
                             </template>
                         </template>
                     </el-table-column>
+                    <el-table-column label="State" align="center" width="55px">
+                        <template slot-scope="scope">
+                            <el-tooltip effect="dark" :content="(scope.row.id)?('Last successful update at '+scope.row.state):'No Data'" placement="right">
+                                <div :class="'dot ' + ((!scope.row.id)?'none':(!scope.row.state?'danger':timeSub(scope.row.state)))"></div>
+                            </el-tooltip>
+                        </template>
+                    </el-table-column>
                     <el-table-column label="Refresh" width="80px">
                         <template slot-scope="scope">
                             <el-tooltip effect="dark" :content="'Refresh '+scope.row.oj+' for '+scope.row.userid" placement="right">
@@ -106,7 +113,8 @@ export default {
             ojid: item.oj_id,
             oj: item.oj_name,
             id: item.oj_username,
-            pwd: ''
+            pwd: '',
+            state: item.last_success_time
           })
         }
       } else {
@@ -121,6 +129,13 @@ export default {
         this.showData()
         this.reFreshChart()
       }, 500)
+    },
+    timeSub (time) {
+      let nowTime = (new Date().getTime()) / 1000
+      let thatTime = (new Date(time).getTime()) / 1000
+      let sub = nowTime - thatTime
+      sub /= 60 * 60
+      return (sub > 2) ? ('danger') : ('success')
     }
   },
   created () {
@@ -148,5 +163,21 @@ export default {
         transform: translate(-50%,0);
         margin-top: 50px;
         margin-bottom: 50px;
+    }
+    .dot{
+        width: 10px;
+        height: 10px;
+        background: #409EFF;
+        border-radius: 50%;
+        margin-left: 15px;
+    }
+    .success{
+        background: #67C23A;
+    }
+    .danger{
+        background: #F56C6C;
+    }
+    .none{
+        background: #909399;
     }
 </style>
