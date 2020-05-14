@@ -40,9 +40,9 @@ export default {
   methods: {
     getData () {
       var that = this
-      that.$http.post(this.api + '/v1/task/get_task_count')
+      that.$http.get(this.api + '/v2/task/summary')
         .then(data => {
-          this.count = data.data.data
+          this.count = data.data.data.redis1 + data.data.data.redis2
         })
       setTimeout(() => {
         this.getData()
