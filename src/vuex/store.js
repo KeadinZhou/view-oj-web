@@ -136,14 +136,14 @@ var mutations = {
       })
   },
   updateUserallChartData (state, username) {
-    state.page.$http.post(api + '/v1/data/get_accept_problem_oj_distributed', {username: username})
+    state.page.$http.get(api + '/v2/user/' + username)
       .then(data => {
         state.UserallChartData = []
-        for (var i in data.data.data) {
-          var item = data.data.data[i]
+        for (let item of data.data.data.problem_distributed) {
+          if (item.num === 0) continue
           state.UserallChartData.push({
-            'OJ': item.oj_name,
-            'Accept': item.accept_problem_count
+            'OJ': item.oj.name,
+            'Accept': item.num
           })
         }
       })
