@@ -177,6 +177,13 @@ export default {
         .then(data => {
           this.chartData.rows = []
           var rating = 1500
+          data.data.data.sort(function (a, b) {
+            if (a.date === b.date) {
+              return 0
+            } else {
+              return a.date < b.date ? -1 : 0
+            }
+          })
           for (var i in data.data.data) {
             var item = data.data.data[i]
             rating += item.add_rating

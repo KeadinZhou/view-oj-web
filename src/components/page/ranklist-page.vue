@@ -7,7 +7,7 @@
         </div>
         <el-card shadow="hover" class="tableBox">
             <div v-loading="loading" v-if="isRefresh">
-                <el-table :data="tableData" :default-sort = "{prop: 'Rating', order: 'descending'}" style="width: 100%" >
+                <el-table :data="tableData" :default-sort = "{prop: 'rating', order: 'descending'}" style="width: 100%" >
                     <el-table-column label="Rank" align="center" width="100px">
                         <template slot-scope="scope">
                             {{ scope.$index + 1 }}
@@ -27,28 +27,16 @@
                             </el-link>
                         </template>
                     </el-table-column>
-                    <el-table-column label="Rating" align="center" width="150px" prop="Rating" sortable>
+                    <el-table-column label="Rating" align="center" width="150px" prop="rating" sortable>
                         <template slot-scope="scope">
                             <el-link :href="'#/user/'+scope.row.username+'?part=rating'" :underline="false">{{ scope.row.rating }}</el-link>
-                            <!--                            <el-tooltip effect="dark" :content="'Refresh rating for '+scope.row.nickname" placement="right">-->
-                            <!--                                <span style="cursor: pointer;margin-left: 5px" @click="$store.commit('refreshUserRating',scope.row.username)"><i class="el-icon-refresh"></i></span>-->
-                            <!--                            </el-tooltip>-->
                         </template>
                     </el-table-column>
-                    <el-table-column label="Codeforces" align="center" width="130px" prop="Codeforces" sortable>
+                    <el-table-column label="Codeforces" align="center" width="130px" prop="cf">
                         <template slot-scope="scope">
-                            {{ scope.row.codeforces_rating }}
+                            {{ Number(scope.row.codeforces_rating) }}
                         </template>
                     </el-table-column>
-<!--                    <el-table-column label="Detail" width="70px">-->
-<!--                        <template slot-scope="scope">-->
-<!--                            <el-button-->
-<!--                                    icon="el-icon-s-data"-->
-<!--                                    size="mini"-->
-<!--                                    @click="gotoDetail(scope.row)">-->
-<!--                            </el-button>-->
-<!--                        </template>-->
-<!--                    </el-table-column>-->
                 </el-table>
             </div>
         </el-card>
