@@ -27,14 +27,19 @@
                             </el-link>
                         </template>
                     </el-table-column>
-                    <el-table-column label="Rating" align="center" width="150px" prop="rating" sortable>
+                    <el-table-column label="Rating" align="center" width="100px" prop="rating" sortable :sort-method="function(a,b) {return Number(a.rating) - Number(b.rating)}">
                         <template slot-scope="scope">
                             <el-link :href="'#/user/'+scope.row.username+'?part=rating'" :underline="false">{{ scope.row.rating }}</el-link>
                         </template>
                     </el-table-column>
-                    <el-table-column label="Codeforces" align="center" width="130px" prop="cf">
+                    <el-table-column label="CF" align="center" width="80px" prop="codeforces" sortable :sort-method="function(a,b) {return Number(a.codeforces_rating) - Number(b.codeforces_rating)}">
                         <template slot-scope="scope">
-                            {{ Number(scope.row.codeforces_rating) }}
+                            <span>{{ Number(scope.row.codeforces_rating) }}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="Cnt" align="center" width="80px" prop="contest" sortable :sort-method="function(a,b) {return Number(a.contest_num) - Number(b.contest_num)}">
+                        <template slot-scope="scope">
+                            <span>{{ Number(scope.row.contest_num) }}</span>
                         </template>
                     </el-table-column>
                 </el-table>
