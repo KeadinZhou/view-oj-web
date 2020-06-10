@@ -113,8 +113,7 @@ export default {
         inputErrorMessage: 'Userid must be 8 digits! (StudentID)'
       }).then(({ value }) => {
         this.$store.commit('addUser', {
-          username: value,
-          nickname: value
+          username: value
         })
       })
     },

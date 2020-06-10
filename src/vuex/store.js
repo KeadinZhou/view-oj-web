@@ -29,7 +29,7 @@ var mutations = {
     state.page = page
   },
   updateUser (state) {
-    state.page.$http.post(api + '/v1/user/get_user_info')
+    state.page.$http.get(api + '/v2/session')
       .then(data => {
         state.user.userid = data.data.data.username
         state.user.username = data.data.data.nickname
@@ -44,7 +44,7 @@ var mutations = {
       })
   },
   login (state, data) {
-    state.page.$http.post(api + '/v1/user/login', {
+    state.page.$http.post(api + '/v2/session', {
       username: data.username,
       password: data.password
     })
@@ -60,7 +60,7 @@ var mutations = {
       })
   },
   logout (state) {
-    state.page.$http.post(api + '/v1/user/logout')
+    state.page.$http.delete(api + '/v2/session')
       .then(data => {
         state.user = {
           userid: '',
@@ -82,15 +82,15 @@ var mutations = {
     state.OverviewData = []
     state.OverviewGrade = new Set()
     var i
-    state.page.$http.post(api + '/v1/data/get_all_accept_problem_count', date || null)
+    state.page.$http.get(api + '/v2/accept_problem/summary', {params: date || null})
       .then(data => {
         for (i in data.data.data) {
           var item = data.data.data[i]
           state.OverviewData.push({
-            userid: item.username,
-            username: item.nickname,
-            number: item.accept_problem_count,
-            group: item.group
+            userid: item.user.username,
+            username: item.user.nickname,
+            number: item.num,
+            group: item.user.group
           })
         }
         for (i = 0; i < state.OverviewData.length; i++) {
@@ -110,7 +110,7 @@ var mutations = {
       })
   },
   updateUserlist (state) {
-    state.page.$http.post(api + '/v1/user/get_user_list')
+    state.page.$http.get(api + '/v2/user/rating')
       .then(data => {
         state.Userlist = new Map()
         for (var i in data.data.data) {
@@ -125,7 +125,9 @@ var mutations = {
       })
   },
   updateAllData (state) {
-    state.page.$http.post(api + '/v1/task/refresh_all_data')
+    state.page.$http.post(api + '/v2/task', {
+      type: 'crawl_user_info'
+    })
       .then(data => {
         state.page.$message.success(data.data.msg)
       })
@@ -135,8 +137,9 @@ var mutations = {
         }
       })
   },
-  updateUserallChartData (state, username) {
-    state.page.$http.get(api + '/v2/user/' + username)
+  updateUserallChartData (state, data) {
+    let chart = data.chart
+    state.page.$http.get(api + '/v2/user/' + data.username)
       .then(data => {
         state.UserallChartData = []
         for (let item of data.data.data.problem_distributed) {
@@ -146,6 +149,9 @@ var mutations = {
             'Accept': item.num
           })
         }
+        chart.chartData.rows = state.UserallChartData
+        chart.loading = false
+        chart.reFreshChart()
       })
       .catch(function (error) {
         if (error.response) {
@@ -154,7 +160,7 @@ var mutations = {
       })
   },
   modifyUserInfo (state, data) {
-    state.page.$http.post(api + '/v1/user/modify_user_info', data)
+    state.page.$http.patch(api + '/v2/user/' + data.username, data)
       .then(data => {
         state.page.$message.success(data.data.msg)
       })
@@ -165,7 +171,7 @@ var mutations = {
       })
   },
   addUser (state, data) {
-    state.page.$http.post(api + '/v1/user/create_user', data)
+    state.page.$http.post(api + '/v2/user', data)
       .then(data => {
         state.page.$store.commit('updateUserlist')
         state.page.$message.success(data.data.msg)
@@ -177,11 +183,11 @@ var mutations = {
       })
   },
   updateOJSetTableData (state, username) {
-    state.page.$http.post(api + '/v1/user/get_oj_username', {username: username})
+    state.page.$http.get(api + '/v2/user/' + username)
       .then(data => {
         state.OJSetTableData = []
-        for (var i in data.data.data) {
-          var item = data.data.data[i]
+        for (var i in data.data.data.oj_username) {
+          var item = data.data.data.oj_username[i]
           state.OJSetTableData.push(item)
         }
       })
@@ -192,7 +198,7 @@ var mutations = {
       })
   },
   modifyOJID (state, data) {
-    state.page.$http.post(api + '/v1/user/modify_oj_username', {
+    state.page.$http.post(api + '/v2/oj_username', {
       username: data.userid,
       oj_id: data.ojid,
       oj_username: data.id,
@@ -208,9 +214,12 @@ var mutations = {
       })
   },
   updateUserOJData (state, data) {
-    state.page.$http.post(api + '/v1/task/refresh_accept_problem', {
-      username: data.userid,
-      oj_id: data.ojid
+    state.page.$http.post(api + '/v2/task', {
+      type: 'crawl_user_info',
+      kwargs: JSON.stringify({
+        username: data.userid,
+        oj_id: data.ojid
+      })
     })
       .then(data => {
         state.page.$message.success(data.data.msg)
@@ -222,7 +231,12 @@ var mutations = {
       })
   },
   refreshProblemRating (state, id) {
-    state.page.$http.post(api + '/v1/task/refresh_problem_rating', {problem_id: id})
+    state.page.$http.post(api + '/v2/task', {
+      type: 'crawl_problem_info',
+      kwargs: JSON.stringify({
+        problem_id: id
+      })
+    })
       .then(data => {
         state.page.$message.success(data.data.msg)
       })
@@ -233,7 +247,7 @@ var mutations = {
       })
   },
   modifyPassword (state, data) {
-    state.page.$http.post(api + '/v1/user/modify_password', data)
+    state.page.$http.patch(api + '/v2/user/' + data.username, data)
       .then(data => {
         state.page.$message.success(data.data.msg)
       })
@@ -261,7 +275,12 @@ var mutations = {
       })
   },
   refreshUserRating (state, username) {
-    state.page.$http.post(api + '/v1/task/refresh_user_rating', {username: username})
+    state.page.$http.post(api + '/v2/task', {
+      type: 'calculate_user_rating',
+      kwargs: JSON.stringify({
+        username: username
+      })
+    })
       .then(data => {
         state.page.$message.success(data.data.msg)
       })

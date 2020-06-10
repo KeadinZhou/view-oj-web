@@ -121,11 +121,11 @@ export default {
       }
       var api = this.$store.state.api
       var that = this
-      that.$http.post(api + '/v1/data/get_accept_problem_count_distributed', postdata)
+      that.$http.get(api + '/v2/accept_problem', {params: postdata})
         .then(data => {
           this.chartData.rows = []
-          for (var i in data.data.data) {
-            var item = data.data.data[i]
+          for (var i in data.data.data.summary) {
+            var item = data.data.data.summary[i]
             this.chartData.rows.push({
               'Time': item.date,
               'Accept': item.count

@@ -110,8 +110,8 @@ export default {
           var item = this.$store.state.OJSetTableData[i]
           this.tableData.push({
             userid: this.userid,
-            ojid: item.oj_id,
-            oj: item.oj_name,
+            ojid: item.oj.id,
+            oj: item.oj.name,
             id: item.oj_username,
             pwd: '',
             state: item.last_success_time
