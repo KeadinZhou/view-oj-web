@@ -58,7 +58,7 @@ export default {
           this.$store.commit('modifyPassword', {
             username: this.$store.state.user.userid,
             old_password: this.oldPwd,
-            new_password: this.newPwd
+            password: this.newPwd
           })
           setTimeout(() => {
             this.toCancel()

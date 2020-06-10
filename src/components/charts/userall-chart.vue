@@ -48,18 +48,16 @@ export default {
       })
     },
     initData () {
-      this.$store.commit('updateUserallChartData', this.userid)
-      setTimeout(() => {
-        this.chartData.rows = this.$store.state.UserallChartData
-        this.loading = false
-        this.reFreshChart()
-      }, 500)
+      this.$store.commit('updateUserallChartData', {
+        username: this.userid,
+        chart: this
+      })
     },
     getData () {
       this.loading = true
       var api = this.$store.state.api
       var that = this
-      that.$http.post(api + '/v1/user/get_user_info_by_username', {username: this.userid})
+      that.$http.get(api + '/v2/session')
         .then(data => {
           this.username = data.data.data.nickname
           this.initData()

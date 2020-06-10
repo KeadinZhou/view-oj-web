@@ -8,7 +8,7 @@
                 <el-table :data="tableData" style="width: 100%">
                     <el-table-column label="Problem" align="center">
                         <template slot-scope="scope">
-                            <el-link :href="scope.row.problem_url" target="_blank" :underline="false">{{ scope.row.oj_name }}-{{ scope.row.problem_pid }}</el-link>
+                            <el-link :href="scope.row.problem.url" target="_blank" :underline="false">{{ scope.row.problem.oj.name }}-{{ scope.row.problem.problem_pid }}</el-link>
                         </template>
                     </el-table-column>
                     <el-table-column label="Rating" align="center">
@@ -63,12 +63,22 @@ export default {
       dataCount: 0,
       tableData: [{
         add_rating: 0,
-        create_time: '2019-07-30 10:25:45',
-        oj_id: 2,
-        oj_name: 'codeforces',
-        problem_id: 91,
-        problem_pid: '734D',
-        rating: 0
+        create_time: '2020-02-14 12:46:29',
+        id: 85827,
+        problem: {
+          id: 9416,
+          oj: {
+            id: 6,
+            name: 'zoj',
+            status: 0
+          },
+          oj_id: 6,
+          problem_pid: '4117',
+          rating: 0,
+          url: 'http://acm.zju.edu.cn/onlinejudge/showProblem.do?problemCode=4117'
+        },
+        problem_id: 9416,
+        username: '31801130'
       }]
     }
   },
@@ -103,10 +113,10 @@ export default {
       }
       var api = this.$store.state.api
       var that = this
-      that.$http.post(api + '/v1/data/get_accept_problem', postdata)
+      that.$http.get(api + '/v2/accept_problem', {params: postdata})
         .then(data => {
-          that.dataCount = data.data.data.count
-          that.tableData = data.data.data.data
+          that.dataCount = data.data.data.detail.meta.count
+          that.tableData = data.data.data.detail.data
           that.currentPage = pageid
           that.reFreshChart()
         })

@@ -173,19 +173,19 @@ export default {
       this.loading = true
       var api = this.$store.state.api
       var that = this
-      that.$http.post(api + '/v1/data/get_rating_trend', {username: this.userid})
+      that.$http.get(api + '/v2/user/' + this.userid)
         .then(data => {
           this.chartData.rows = []
           var rating = 1500
-          data.data.data.sort(function (a, b) {
+          data.data.data.rating_trend.sort(function (a, b) {
             if (a.date === b.date) {
               return 0
             } else {
               return a.date < b.date ? -1 : 0
             }
           })
-          for (var i in data.data.data) {
-            var item = data.data.data[i]
+          for (var i in data.data.data.rating_trend) {
+            var item = data.data.data.rating_trend[i]
             rating += item.add_rating
             this.chartData.rows.push({
               Date: item.date,
