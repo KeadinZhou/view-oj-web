@@ -13,7 +13,7 @@
                     </el-table-column>
                     <el-table-column label="Rating" align="center">
                         <template slot-scope="scope">
-                            {{ scope.row.rating }}
+                            {{ scope.row.problem.rating }}
                         </template>
                     </el-table-column>
                     <el-table-column label="Contribution" align="center">
