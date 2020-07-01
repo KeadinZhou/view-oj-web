@@ -57,7 +57,7 @@ export default {
       this.loading = true
       var api = this.$store.state.api
       var that = this
-      that.$http.get(api + '/v2/session')
+      that.$http.get(api + '/v2/user/' + this.userid)
         .then(data => {
           this.username = data.data.data.nickname
           this.initData()
