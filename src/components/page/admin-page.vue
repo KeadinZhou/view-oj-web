@@ -171,6 +171,7 @@ export default {
     }
   },
   created () {
+    document.title = "Admin - viewOJ"
     this.permissionCheck()
   },
   computed: {

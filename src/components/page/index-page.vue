@@ -85,6 +85,7 @@ export default {
     }
   },
   created () {
+    document.title = "Home - viewOJ"
     this.changeOverviewDate()
   },
   methods: {

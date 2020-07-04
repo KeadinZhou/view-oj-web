@@ -1,6 +1,6 @@
 <template>
     <div id="page-top">
-        <el-menu :default-active="this.$route.path" class="page-nav" style="height:60px;width:100%;z-index:1000" mode="horizontal" @select="handleSelect" router>
+        <el-menu :default-active="this.$route.path" class="page-nav" style="height:60px;width:100%;z-index:1000" mode="horizontal" router>
             <el-menu-item index="/" class="nav-item" route="/">Home</el-menu-item>
             <el-menu-item index="/ranklist" class="nav-item" route="/ranklist">Ranklist</el-menu-item>
             <el-menu-item index="/monitor" class="nav-item" route="/monitor">Monitor</el-menu-item>
@@ -12,7 +12,7 @@
             </template>
             <div class="userBox">
                 <template v-if="this.$store.state.user.userid">
-                    <span>Welcome,<use-change-box></use-change-box>&nbsp;&nbsp;</span>
+                    <span style="margin-right: 15px">Welcome,<use-change-box></use-change-box></span>
                     <el-button icon="el-icon-user" @click="logout">Logout</el-button>
                 </template>
                 <template v-else>
@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import store from '@/vuex/store.js'
+import store from '@/store'
 import UserChangeBox from '@/components/pageitem/user-change-box'
 export default {
   name: 'page-nav',
@@ -37,8 +37,6 @@ export default {
   },
   store,
   methods: {
-    handleSelect (key, keyPath) {
-    },
     logout () {
       this.$store.commit('logout')
       this.$router.push('/')

@@ -19,7 +19,7 @@
                 </el-table-column>
                 <template v-for="(problem, index) in  proList">
                     <el-table-column align="center" :key="index" min-width="35">
-                        <template slot="header" slot-scope="scope">
+                        <template slot="header">
                             <el-tooltip class="item" effect="dark" :content="problem.oj_name+'-'+problem.problem_pid" placement="top">
                                 <el-link :href="problem.problem_url" target="_blank" :underline="false" style="color: gray"><b>{{String.fromCharCode((65+index))}}</b></el-link>
                             </el-tooltip>
