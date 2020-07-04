@@ -182,14 +182,17 @@ var mutations = {
         }
       })
   },
-  updateOJSetTableData (state, username) {
-    state.page.$http.get(api + '/v2/user/' + username)
+  updateOJSetTableData (state, data) {
+    let chart = data.chart
+    state.page.$http.get(api + '/v2/user/' + data.username)
       .then(data => {
         state.OJSetTableData = []
         for (var i in data.data.data.oj_username) {
           var item = data.data.data.oj_username[i]
           state.OJSetTableData.push(item)
         }
+        chart.showData()
+        chart.reFreshChart()
       })
       .catch(function (error) {
         if (error.response) {

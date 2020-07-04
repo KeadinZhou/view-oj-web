@@ -28,7 +28,7 @@
                     </el-table-column>
                     <el-table-column label="Refresh" width="80px">
                         <template slot-scope="scope">
-                            <el-tooltip effect="dark" :content="'Refresh the Rating of '+scope.row.oj_name+'-'+scope.row.problem_pid" placement="right">
+                            <el-tooltip effect="dark" :content="'Refresh the Rating of '+scope.row.problem.oj.name+'-'+scope.row.problem.problem_pid" placement="right">
                                 <span style="cursor: pointer;margin-left: 20px" @click="refreshProblem(scope.row)"><i class="el-icon-refresh"></i></span>
                             </el-tooltip>
                         </template>
@@ -84,7 +84,7 @@ export default {
   },
   methods: {
     refreshProblem (row) {
-      this.$store.commit('refreshProblemRating', row.problem_id)
+      this.$store.commit('refreshProblemRating', row.problem.problem_pid)
     },
     current_change (currentPage) {
       this.getData(currentPage)

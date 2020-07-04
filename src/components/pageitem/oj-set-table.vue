@@ -124,11 +124,10 @@ export default {
       }
     },
     getData () {
-      this.$store.commit('updateOJSetTableData', this.userid)
-      setTimeout(() => {
-        this.showData()
-        this.reFreshChart()
-      }, 500)
+      this.$store.commit('updateOJSetTableData', {
+        username: this.userid,
+        chart: this
+      })
     },
     timeSub (time) {
       let nowTime = (new Date().getTime()) / 1000
