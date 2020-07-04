@@ -5,7 +5,7 @@ import router from './router'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import VueRouter from 'vue-router'
-import store from './vuex/store.js'
+import store from './store'
 import VCharts from 'v-charts'
 import axios from 'axios'
 import App from './App'
@@ -19,16 +19,14 @@ Vue.prototype.$http = axios
 
 /* eslint-disable no-new */
 new Vue({
-  el: '#app',
   router,
   store,
-  components: {App},
-  template: '<App/>',
+  render: h => h(App),
   created () {
     store.commit('savePage', this)
     this.$store.commit('updateUser')
   }
-})
+}).$mount('#app')
 
 router.beforeEach((to, from, next) => {
   if (to.meta.title) {
