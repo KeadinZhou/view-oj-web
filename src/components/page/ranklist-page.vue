@@ -107,6 +107,7 @@ export default {
     }
   },
   created () {
+    document.title = "Ranklist - viewOJ"
     this.getData()
   },
   watch: {

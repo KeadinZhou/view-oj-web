@@ -12,7 +12,7 @@
             </template>
             <div class="userBox">
                 <template v-if="this.$store.state.user.userid">
-                    <span>Welcome,<use-change-box></use-change-box>&nbsp;&nbsp;</span>
+                    <span style="margin-right: 15px">Welcome,<use-change-box></use-change-box></span>
                     <el-button icon="el-icon-user" @click="logout">Logout</el-button>
                 </template>
                 <template v-else>

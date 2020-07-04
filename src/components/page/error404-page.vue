@@ -16,7 +16,10 @@
 
 <script>
 export default {
-  name: 'error404-page'
+  name: 'error404-page',
+  created () {
+    document.title = "Error - viewOJ"
+  }
 }
 </script>
 

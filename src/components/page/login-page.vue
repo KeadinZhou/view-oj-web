@@ -61,6 +61,9 @@ export default {
         }
       })
     }
+  },
+  created () {
+    document.title = "Login - viewOJ"
   }
 }
 </script>

@@ -298,6 +298,7 @@ export default {
     }
   },
   created () {
+    document.title = "Monitor - viewOJ"
     this.getList()
     this.getOJList()
   }

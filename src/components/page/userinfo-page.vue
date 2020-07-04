@@ -54,6 +54,7 @@ export default {
     }
   },
   created () {
+    document.title = "Userinfo - viewOJ"
     this.permissionCheck()
   },
   mounted () {
