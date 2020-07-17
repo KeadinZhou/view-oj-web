@@ -249,23 +249,9 @@ var mutations = {
         }
       })
   },
-  modifyPassword (state, data) {
-    state.page.$http.patch(api + '/v2/user/' + data.username, data)
-      .then(data => {
-        state.page.$message.success(data.data.msg)
-      })
-      .catch(function (error) {
-        if (error.response) {
-          state.page.$message.error(error.response.data.msg)
-        }
-      })
-  },
   modifyUserNameBySelf (state, username) {
-    state.page.$http.post(api + '/v1/user/modify_user_info', {
-      username: state.user.userid,
-      nickname: username,
-      permission: state.user.permission,
-      status: state.user.status
+    state.page.$http.patch(api + '/v2/user/' + state.user.userid, {
+      nickname: username
     })
       .then(data => {
         state.user.username = username
