@@ -20,12 +20,12 @@
                 <template v-for="(problem, index) in  proList">
                     <el-table-column align="center" :key="index" min-width="35">
                         <template slot="header">
-                            <el-tooltip class="item" effect="dark" :content="problem.oj_name+'-'+problem.problem_pid" placement="top">
-                                <el-link :href="problem.problem_url" target="_blank" :underline="false" style="color: gray"><b>{{String.fromCharCode((65+index))}}</b></el-link>
+                            <el-tooltip class="item" effect="dark" :content="problem.oj.name+'-'+problem.problem_pid" placement="top">
+                                <el-link :href="problem.url" target="_blank" :underline="false" style="color: gray"><b>{{String.fromCharCode((65+index))}}</b></el-link>
                             </el-tooltip>
                         </template>
                         <template slot-scope="scope">
-                            <el-tooltip class="item" effect="dark" :content="problem.oj_name+'-'+problem.problem_pid" placement="top">
+                            <el-tooltip class="item" effect="dark" :content="problem.oj.name+'-'+problem.problem_pid" placement="top">
                                 <i :class="scope.row.state[index]?'el-icon-success doneColor':'el-icon-minus'"></i>
                             </el-tooltip>
                         </template>
@@ -51,20 +51,20 @@ export default {
   methods: {
     initData () {
       this.tableData = []
-      for (var man of this.proData) {
-        var manProList = new Map()
-        for (var manPro of man.data) {
-          manProList.set(manPro.problem_id, manPro.create_time)
+      for (let data of this.proData) {
+        let proset = new Set()
+        for (let ac_problem of data.data) {
+          proset.add(ac_problem.problem.problem_pid)
         }
-        var state = []
-        for (var problem of this.proList) {
-          state.push(manProList.has(problem.problem_id))
+        let state = []
+        for (let problem of this.proList) {
+          state.push(proset.has(problem.problem_pid))
         }
         this.tableData.push({
-          userid: man.username,
-          username: man.nickname,
+          userid: data.user.username,
+          username: data.user.nickname,
           state: state,
-          count: manProList.size
+          count: proset.size
         })
       }
     }
