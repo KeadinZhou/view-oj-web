@@ -55,7 +55,7 @@ export default {
       }
       if (this.changePwd) {
         if (this.newPwd === this.newPwd2) {
-          this.$store.commit('modifyPassword', {
+          this.$store.commit('modifyUserInfo', {
             username: this.$store.state.user.userid,
             old_password: this.oldPwd,
             password: this.newPwd
