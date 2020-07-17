@@ -19,18 +19,18 @@ Vue.prototype.$http = axios
 
 /* eslint-disable no-new */
 new Vue({
-  router,
-  store,
-  render: h => h(App),
-  created () {
-    store.commit('savePage', this)
-    this.$store.commit('updateUser')
-  }
+    router,
+    store,
+    render: h => h(App),
+    created() {
+        store.commit('savePage', this)
+        this.$store.commit('updateUser')
+    }
 }).$mount('#app')
 
 router.beforeEach((to, from, next) => {
-  if (to.meta.title) {
-    document.title = to.meta.title
-  }
-  next()
+    if (to.meta.title) {
+        document.title = to.meta.title
+    }
+    next()
 })
