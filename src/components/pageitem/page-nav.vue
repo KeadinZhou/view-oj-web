@@ -1,11 +1,14 @@
 <template>
     <div id="page-top">
-        <el-menu :default-active="this.$route.path" class="page-nav" style="height:60px;width:100%;z-index:1000" mode="horizontal" router>
+        <el-menu :default-active="this.$route.path" class="page-nav" style="height:60px;width:100%;z-index:1000"
+                 mode="horizontal" router>
             <el-menu-item index="/" class="nav-item" route="/">Home</el-menu-item>
             <el-menu-item index="/ranklist" class="nav-item" route="/ranklist">Ranklist</el-menu-item>
             <el-menu-item index="/monitor" class="nav-item" route="/monitor">Monitor</el-menu-item>
             <template v-if="this.$store.state.user.userid">
-                <el-menu-item :index="'/user/'+$store.state.user.userid" class="nav-item" :route="'/user/'+$store.state.user.userid">Userinfo</el-menu-item>
+                <el-menu-item :index="'/user/'+$store.state.user.userid" class="nav-item"
+                              :route="'/user/'+$store.state.user.userid">Userinfo
+                </el-menu-item>
                 <template v-if="this.$store.state.user.permission === 1">
                     <el-menu-item index="/admin" class="nav-item" route="/admin">Admin</el-menu-item>
                 </template>
@@ -24,37 +27,38 @@
 </template>
 
 <script>
-import store from '@/store'
-import UserChangeBox from '@/components/pageitem/user-change-box'
-export default {
-  name: 'page-nav',
-  components: {
-    'use-change-box': UserChangeBox
-  },
-  data () {
-    return {
+    import store from '@/store'
+    import UserChangeBox from '@/components/pageitem/user-change-box'
+
+    export default {
+        name: 'page-nav',
+        components: {
+            'use-change-box': UserChangeBox
+        },
+        data() {
+            return {}
+        },
+        store,
+        methods: {
+            logout() {
+                this.$store.commit('logout')
+                this.$router.push('/')
+            }
+        }
     }
-  },
-  store,
-  methods: {
-    logout () {
-      this.$store.commit('logout')
-      this.$router.push('/')
-    }
-  }
-}
 </script>
 
 <style scoped>
-    .nav-item{
+    .nav-item {
         font-size: 16px;
     }
-    .userBox{
+
+    .userBox {
         position: relative;
         float: right;
         top: 50%;
-        transform: translate(0,-50%);
-        outline:none;
+        transform: translate(0, -50%);
+        outline: none;
         font-size: 15px;
     }
 </style>

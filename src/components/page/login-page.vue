@@ -27,7 +27,8 @@
                     </el-form-item>
                     <el-form-item>
                         <div class="submitBox">
-                            <el-button class="submitButton" type="primary" @click="submitForm('FormData')">Login</el-button>
+                            <el-button class="submitButton" type="primary" @click="submitForm('FormData')">Login
+                            </el-button>
                         </div>
                     </el-form-item>
                 </el-form>
@@ -37,69 +38,77 @@
 </template>
 
 <script>
-export default {
-  name: 'login-page',
-  data () {
-    return {
-      FormData: {
-        username: '',
-        password: ''
-      },
-      rules: {
-        username: [{ required: true, message: 'Please enter your username!', trigger: 'blur' }],
-        password: [{ required: true, message: 'Please enter your password!', trigger: 'blur' }]
-      }
-    }
-  },
-  methods: {
-    submitForm (formName) {
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          this.$store.commit('login', {username: this.FormData.username, password: this.FormData.password})
-        } else {
-          return false
+    export default {
+        name: 'login-page',
+        data() {
+            return {
+                FormData: {
+                    username: '',
+                    password: ''
+                },
+                rules: {
+                    username: [{required: true, message: 'Please enter your username!', trigger: 'blur'}],
+                    password: [{required: true, message: 'Please enter your password!', trigger: 'blur'}]
+                }
+            }
+        },
+        methods: {
+            submitForm(formName) {
+                this.$refs[formName].validate((valid) => {
+                    if (valid) {
+                        this.$store.commit('login', {
+                            username: this.FormData.username,
+                            password: this.FormData.password
+                        })
+                    } else {
+                        return false
+                    }
+                })
+            }
+        },
+        created() {
+            document.title = "Login - viewOJ"
         }
-      })
     }
-  },
-  created () {
-    document.title = "Login - viewOJ"
-  }
-}
 </script>
 
 <style scoped>
-    .box-card{
+    .box-card {
         position: absolute;
         top: 50%;
         left: 50%;
-        transform: translate(-50%,-50%);
+        transform: translate(-50%, -50%);
         width: 400px;
     }
-    .imgBox{
+
+    .imgBox {
         position: absolute;
         margin-top: 10px;
         left: 50%;
-        transform: translate(-50%,0);
+        transform: translate(-50%, 0);
     }
-    .form-box{
+
+    .form-box {
         width: 80%;
         float: left;
-        transform: translate(12%,0);
+        transform: translate(12%, 0);
     }
-    .page-title{
+
+    .page-title {
         width: 100%;
         margin-top: 150px;
         margin-bottom: 20px;
         text-align: center;
         font-size: 30px;
     }
-    .submitBox{
+
+    .submitBox {
         width: 100%;
         margin-top: 10px;
         margin-bottom: 10px;
     }
-    .submitButton{
+
+    .submitButton {
         width: 100%;
         height: auto;
     }

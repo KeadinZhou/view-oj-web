@@ -19,22 +19,28 @@
                     <el-table-column label="ID" width="200px" align="center">
                         <template slot-scope="scope">
                             {{ scope.row.id }}
-                            <template v-if="(userid === $store.state.user.userid && !scope.row.id) || $store.state.user.permission === 1">
-                                &nbsp;<span style="cursor: pointer" @click="editOJID(scope.row)"><i class="el-icon-edit"></i></span>
+                            <template
+                                    v-if="(userid === $store.state.user.userid && !scope.row.id) || $store.state.user.permission === 1">
+                                &nbsp;<span style="cursor: pointer" @click="editOJID(scope.row)"><i
+                                    class="el-icon-edit"></i></span>
                             </template>
                         </template>
                     </el-table-column>
                     <el-table-column label="State" align="center" width="55px">
                         <template slot-scope="scope">
-                            <el-tooltip effect="dark" :content="(scope.row.id)?('Last successful update at '+scope.row.state):'No Data'" placement="right">
+                            <el-tooltip effect="dark"
+                                        :content="(scope.row.id)?('Last successful update at '+scope.row.state):'No Data'"
+                                        placement="right">
                                 <div :class="'dot ' + ((!scope.row.id)?'none':(!scope.row.state?'danger':timeSub(scope.row.state)))"></div>
                             </el-tooltip>
                         </template>
                     </el-table-column>
                     <el-table-column label="Refresh" width="80px">
                         <template slot-scope="scope">
-                            <el-tooltip effect="dark" :content="'Refresh '+scope.row.oj+' for '+scope.row.userid" placement="right">
-                                <span style="cursor: pointer;margin-left: 20px" @click="refreshOJ(scope.row)"><i class="el-icon-refresh"></i></span>
+                            <el-tooltip effect="dark" :content="'Refresh '+scope.row.oj+' for '+scope.row.userid"
+                                        placement="right">
+                                <span style="cursor: pointer;margin-left: 20px" @click="refreshOJ(scope.row)"><i
+                                        class="el-icon-refresh"></i></span>
                             </el-tooltip>
                         </template>
                     </el-table-column>
@@ -45,138 +51,143 @@
 </template>
 
 <script>
-export default {
-  name: 'oj-set-table',
-  props: {
-    userid: String
-  },
-  data () {
-    return {
-      loading: false,
-      isRefresh: true,
-      username: '罗老嫖',
-      tableData: []
-    }
-  },
-  computed: {
-    loguser: function () {
-      return (this.$store.state.user.permission === 1) ? this.userid : this.$store.state.user.userid
-    }
-  },
-  methods: {
-    editOJID (row) {
-      const that = this
-      var pintiaMsg = (row.oj === 'pintia' ? ' <b>(username::password)<b/>' : '')
-      that.$prompt('Input the ID of ' + row.oj + pintiaMsg, 'Modify', {
-        confirmButtonText: 'Submit',
-        cancelButtonText: 'Cancel',
-        inputValue: row.id,
-        dangerouslyUseHTMLString: true
-      }).then(({ value }) => {
-        var tmp = value.split('::')
-        if (tmp.length === 1 && row.oj === 'pintia' && value !== '') {
-          that.$message.error('pintia need set password, use username::password to set password!')
-        } else {
-          row.id = ''
-          row.pwd = ''
-          if (tmp.length >= 1) row.id = tmp[0]
-          if (tmp.length >= 2) row.pwd = tmp[1]
-          this.$store.commit('modifyOJID', {
-            userid: row.userid,
-            ojid: row.ojid,
-            id: row.id,
-            pwd: row.pwd
-          })
+    export default {
+        name: 'oj-set-table',
+        props: {
+            userid: String
+        },
+        data() {
+            return {
+                loading: false,
+                isRefresh: true,
+                username: '罗老嫖',
+                tableData: []
+            }
+        },
+        computed: {
+            loguser: function () {
+                return (this.$store.state.user.permission === 1) ? this.userid : this.$store.state.user.userid
+            }
+        },
+        methods: {
+            editOJID(row) {
+                const that = this
+                var pintiaMsg = (row.oj === 'pintia' ? ' <b>(username::password)<b/>' : '')
+                that.$prompt('Input the ID of ' + row.oj + pintiaMsg, 'Modify', {
+                    confirmButtonText: 'Submit',
+                    cancelButtonText: 'Cancel',
+                    inputValue: row.id,
+                    dangerouslyUseHTMLString: true
+                }).then(({value}) => {
+                    var tmp = value.split('::')
+                    if (tmp.length === 1 && row.oj === 'pintia' && value !== '') {
+                        that.$message.error('pintia need set password, use username::password to set password!')
+                    } else {
+                        row.id = ''
+                        row.pwd = ''
+                        if (tmp.length >= 1) row.id = tmp[0]
+                        if (tmp.length >= 2) row.pwd = tmp[1]
+                        this.$store.commit('modifyOJID', {
+                            userid: row.userid,
+                            ojid: row.ojid,
+                            id: row.id,
+                            pwd: row.pwd
+                        })
+                    }
+                })
+            },
+            refreshOJ(row) {
+                this.$store.commit('updateUserOJData', {
+                    userid: row.userid,
+                    ojid: row.ojid
+                })
+            },
+            reFreshChart() {
+                this.isRefresh = false
+                this.$nextTick(function () {
+                    this.isRefresh = true
+                    this.loading = false
+                })
+            },
+            showData() {
+                if (this.$store.state.OJSetTableData) {
+                    this.tableData = []
+                    for (var i in this.$store.state.OJSetTableData) {
+                        var item = this.$store.state.OJSetTableData[i]
+                        this.tableData.push({
+                            userid: this.userid,
+                            ojid: item.oj.id,
+                            oj: item.oj.name,
+                            id: item.oj_username,
+                            pwd: '',
+                            state: item.last_success_time
+                        })
+                    }
+                } else {
+                    setTimeout(() => {
+                        this.showData()
+                    }, 500)
+                }
+            },
+            getData() {
+                this.$store.commit('updateOJSetTableData', {
+                    username: this.userid,
+                    chart: this
+                })
+            },
+            timeSub(time) {
+                let nowTime = (new Date().getTime()) / 1000
+                let thatTime = (new Date(time).getTime()) / 1000
+                let sub = nowTime - thatTime
+                sub /= 60 * 60
+                return (sub > 2) ? ('danger') : ('success')
+            }
+        },
+        created() {
+            this.getData()
+        },
+        watch: {
+            userid: function () {
+                this.getData()
+            }
         }
-      })
-    },
-    refreshOJ (row) {
-      this.$store.commit('updateUserOJData', {
-        userid: row.userid,
-        ojid: row.ojid
-      })
-    },
-    reFreshChart () {
-      this.isRefresh = false
-      this.$nextTick(function () {
-        this.isRefresh = true
-        this.loading = false
-      })
-    },
-    showData () {
-      if (this.$store.state.OJSetTableData) {
-        this.tableData = []
-        for (var i in this.$store.state.OJSetTableData) {
-          var item = this.$store.state.OJSetTableData[i]
-          this.tableData.push({
-            userid: this.userid,
-            ojid: item.oj.id,
-            oj: item.oj.name,
-            id: item.oj_username,
-            pwd: '',
-            state: item.last_success_time
-          })
-        }
-      } else {
-        setTimeout(() => {
-          this.showData()
-        }, 500)
-      }
-    },
-    getData () {
-      this.$store.commit('updateOJSetTableData', {
-        username: this.userid,
-        chart: this
-      })
-    },
-    timeSub (time) {
-      let nowTime = (new Date().getTime()) / 1000
-      let thatTime = (new Date(time).getTime()) / 1000
-      let sub = nowTime - thatTime
-      sub /= 60 * 60
-      return (sub > 2) ? ('danger') : ('success')
     }
-  },
-  created () {
-    this.getData()
-  },
-  watch: {
-    userid: function () {
-      this.getData()
-    }
-  }
-}
 </script>
 
 <style scoped>
-    .tableTitle{
+    .tableTitle {
         text-align: center;
         font-size: 25px;
         margin-top: 30px;
         margin-bottom: 30px;
     }
-    .tableBox{
+
+    .tableBox {
         position: relative;
         width: 700px;
         left: 50%;
-        transform: translate(-50%,0);
+        transform: translate(-50%, 0);
         margin-top: 50px;
         margin-bottom: 50px;
     }
-    .dot{
+
+    .dot {
         width: 10px;
         height: 10px;
         background: #409EFF;
         border-radius: 50%;
         margin-left: 15px;
     }
-    .success{
+
+    .success {
         background: #67C23A;
     }
-    .danger{
+
+    .danger {
         background: #F56C6C;
     }
-    .none{
+
+    .none {
         background: #909399;
     }
 </style>

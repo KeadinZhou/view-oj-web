@@ -7,7 +7,7 @@
         </div>
         <el-card shadow="hover" class="tableBox">
             <div v-loading="loading" v-if="isRefresh">
-                <el-table :data="tableData" :default-sort = "{prop: 'rating', order: 'descending'}" style="width: 100%" >
+                <el-table :data="tableData" :default-sort="{prop: 'rating', order: 'descending'}" style="width: 100%">
                     <el-table-column label="Rank" align="center" width="100px">
                         <template slot-scope="scope">
                             {{ scope.$index + 1 }}
@@ -23,21 +23,27 @@
                     <el-table-column label="Username" align="center">
                         <template slot-scope="scope">
                             <el-link :href="'#/user/'+scope.row.username+'?part=page-top'" :underline="false">
-                                <b :style="'font-weight: 900;color:'+getColorForRating(scope.row.rating)">{{ scope.row.nickname }}</b>
+                                <b :style="'font-weight: 900;color:'+getColorForRating(scope.row.rating)">{{
+                                    scope.row.nickname }}</b>
                             </el-link>
                         </template>
                     </el-table-column>
-                    <el-table-column label="Rating" align="center" width="100px" prop="rating" sortable :sort-method="function(a,b) {return Number(a.rating) - Number(b.rating)}">
+                    <el-table-column label="Rating" align="center" width="100px" prop="rating" sortable
+                                     :sort-method="function(a,b) {return Number(a.rating) - Number(b.rating)}">
                         <template slot-scope="scope">
-                            <el-link :href="'#/user/'+scope.row.username+'?part=rating'" :underline="false">{{ scope.row.rating }}</el-link>
+                            <el-link :href="'#/user/'+scope.row.username+'?part=rating'" :underline="false">{{
+                                scope.row.rating }}
+                            </el-link>
                         </template>
                     </el-table-column>
-                    <el-table-column label="CF" align="center" width="80px" prop="codeforces" sortable :sort-method="function(a,b) {return Number(a.codeforces_rating) - Number(b.codeforces_rating)}">
+                    <el-table-column label="CF" align="center" width="80px" prop="codeforces" sortable
+                                     :sort-method="function(a,b) {return Number(a.codeforces_rating) - Number(b.codeforces_rating)}">
                         <template slot-scope="scope">
                             <span>{{ Number(scope.row.codeforces_rating) }}</span>
                         </template>
                     </el-table-column>
-                    <el-table-column label="Cnt" align="center" width="80px" prop="contest" sortable :sort-method="function(a,b) {return Number(a.contest_num) - Number(b.contest_num)}">
+                    <el-table-column label="Cnt" align="center" width="80px" prop="contest" sortable
+                                     :sort-method="function(a,b) {return Number(a.contest_num) - Number(b.contest_num)}">
                         <template slot-scope="scope">
                             <span>{{ Number(scope.row.contest_num) }}</span>
                         </template>
@@ -49,80 +55,80 @@
 </template>
 
 <script>
-export default {
-  name: 'ranklist-page',
-  data () {
-    return {
-      loading: false,
-      isRefresh: true,
-      tableData: [],
-      showAll: false
-    }
-  },
-  methods: {
-    getColorForRating (rating) {
-      if (rating <= 1600) return '#808080'
-      if (rating <= 1800) return '#008000'
-      if (rating <= 2000) return '#03a89e'
-      if (rating <= 2300) return '#0000ff'
-      if (rating <= 2500) return '#aa00aa'
-      if (rating <= 2800) return '#FF8C00'
-      if (rating <= 3000) return '#ff7777'
-      if (rating <= 3300) return '#ff0000'
-      return '#aa0000'
-    },
-    gotoDetail (row) {
-      this.$router.push('/user/' + row.username + '?part=rating')
-    },
-    current_change (currentPage) {
-      this.getData(currentPage)
-    },
-    reFreshChart () {
-      this.isRefresh = false
-      this.$nextTick(function () {
-        this.isRefresh = true
-        this.loading = false
-      })
-    },
-    getData () {
-      this.loading = true
-      var api = this.$store.state.api
-      var that = this
-      that.$http.get(api + '/v2/user/rating')
-        .then(data => {
-          // that.tableData = data.data.data
-          that.tableData = []
-          for (var item of data.data.data) {
-            if (item.status === 1 || that.showAll) {
-              that.tableData.push(item)
+    export default {
+        name: 'ranklist-page',
+        data() {
+            return {
+                loading: false,
+                isRefresh: true,
+                tableData: [],
+                showAll: false
             }
-          }
-          that.reFreshChart()
-        })
-        .catch(function (error) {
-          if (error.response) {
-            that.$message.error(error.response.data.msg)
-          }
-        })
+        },
+        methods: {
+            getColorForRating(rating) {
+                if (rating <= 1600) return '#808080'
+                if (rating <= 1800) return '#008000'
+                if (rating <= 2000) return '#03a89e'
+                if (rating <= 2300) return '#0000ff'
+                if (rating <= 2500) return '#aa00aa'
+                if (rating <= 2800) return '#FF8C00'
+                if (rating <= 3000) return '#ff7777'
+                if (rating <= 3300) return '#ff0000'
+                return '#aa0000'
+            },
+            gotoDetail(row) {
+                this.$router.push('/user/' + row.username + '?part=rating')
+            },
+            current_change(currentPage) {
+                this.getData(currentPage)
+            },
+            reFreshChart() {
+                this.isRefresh = false
+                this.$nextTick(function () {
+                    this.isRefresh = true
+                    this.loading = false
+                })
+            },
+            getData() {
+                this.loading = true
+                var api = this.$store.state.api
+                var that = this
+                that.$http.get(api + '/v2/user/rating')
+                    .then(data => {
+                        // that.tableData = data.data.data
+                        that.tableData = []
+                        for (var item of data.data.data) {
+                            if (item.status === 1 || that.showAll) {
+                                that.tableData.push(item)
+                            }
+                        }
+                        that.reFreshChart()
+                    })
+                    .catch(function (error) {
+                        if (error.response) {
+                            that.$message.error(error.response.data.msg)
+                        }
+                    })
+            }
+        },
+        created() {
+            document.title = "Ranklist - viewOJ"
+            this.getData()
+        },
+        watch: {
+            showAll: function () {
+                this.getData()
+            }
+        }
     }
-  },
-  created () {
-    document.title = "Ranklist - viewOJ"
-    this.getData()
-  },
-  watch: {
-    showAll: function () {
-      this.getData()
-    }
-  }
-}
 </script>
 
 <style scoped>
-    .tableBox{
+    .tableBox {
         position: relative;
         left: 50%;
         width: 800px;
-        transform: translate(-50%,0);
+        transform: translate(-50%, 0);
     }
 </style>
