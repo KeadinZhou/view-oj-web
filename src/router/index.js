@@ -47,6 +47,13 @@ export default new Router({
             meta: {
                 title: 'Monitor - viewOJ'
             }
+        },{
+            path: '/camp',
+            name: 'camp-page',
+            component: () => import('@/components/page/camp-page'),
+            meta: {
+                title: 'Camp - viewOJ'
+            }
         }, {
             path: '/error401',
             name: 'error401-page',

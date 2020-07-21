@@ -3,7 +3,7 @@ import Vuex from 'vuex'
 
 Vue.use(Vuex)
 
-const debug = false
+const debug = true
 const api = debug ? 'http://127.0.0.1:5000' : 'http://view-oj-api.newitd.com'
 var state = {
     page: null,

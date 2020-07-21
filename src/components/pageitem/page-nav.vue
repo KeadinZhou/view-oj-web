@@ -4,6 +4,7 @@
                  mode="horizontal" router>
             <el-menu-item index="/" class="nav-item" route="/">Home</el-menu-item>
             <el-menu-item index="/ranklist" class="nav-item" route="/ranklist">Ranklist</el-menu-item>
+            <el-menu-item index="/camp" class="nav-item" route="/camp">Camp</el-menu-item>
             <el-menu-item index="/monitor" class="nav-item" route="/monitor">Monitor</el-menu-item>
             <template v-if="this.$store.state.user.userid">
                 <el-menu-item :index="'/user/'+$store.state.user.userid" class="nav-item"
