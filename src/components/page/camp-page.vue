@@ -119,7 +119,10 @@
             },
             refreshCourseData() {
                 let that = this
-                if (this.course_id === 'total') return
+                if (this.course_id === 'total'){
+                    that.isRefresh = false
+                    return
+                }
                 let api = this.$store.state.api
                 this.$http.get(api + '/v2/camp/course/' + this.course_id)
                     .then(response => {
