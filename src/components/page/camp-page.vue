@@ -60,7 +60,7 @@
                         </div>
                     </el-menu>
                 </el-aside>
-                <el-main>
+                <el-main v-if="!isRefresh">
                     <el-tabs type="card">
                         <el-tab-pane label="榜单">
                             <camp-rank-list
@@ -95,6 +95,7 @@
                 course_id: '',
                 contests: [],
                 isReloading: false,
+                isRefresh: false,
                 isEditDialogShow: false
             }
         },
@@ -113,6 +114,11 @@
                 let sep = index.split('-')
                 this.camp_id = sep[0]
                 this.course_id = sep[1]
+                this.isRefresh = true
+                let that = this
+                this.$nextTick(() => {
+                    that.isRefresh = false
+                })
                 this.refreshCourseData()
             },
             refreshCourseData() {
