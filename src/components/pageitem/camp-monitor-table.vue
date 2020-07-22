@@ -79,6 +79,7 @@
         },
         methods: {
             refreshContestData() {
+                if (this.selectedContest === '') return
                 let api = this.$store.state.api
                 let that = this
                 this.tableData = []
@@ -112,10 +113,7 @@
             }
         },
         created() {
-            if (this.contests.length === 0) {
-                return
-            }
-            this.selectedContest = this.contests[0].id
+            this.selectedContest = ''
         },
         watch: {
             selectedContest() {
