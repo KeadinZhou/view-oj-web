@@ -12,7 +12,7 @@
                     :value="contest.id"/>
         </el-select>
         <template v-if="selectedContest !== ''">
-            <el-card class="tableBox" shadow="never">
+            <el-card shadow="never">
                 <el-table
                         :data="tableData"
                         :default-sort="{prop: 'rating', order: 'descending'}"
@@ -27,7 +27,7 @@
                             {{ scope.row.username }}
                         </template>
                     </el-table-column>
-                    <el-table-column label="Cnt" align="center" width="90" prop="count"
+                    <el-table-column label="Cnt" align="center" width="70" prop="count"
                                      sortable :sort-method="function(a,b) {return Number(a.rating) - Number(b.rating)}">
                         <template slot-scope="scope">
                             {{ scope.row.count }}
