@@ -124,8 +124,10 @@
             contests() {
                 if (this.contests.length === 0)
                     this.selectedContest = ''
-                else
+                else {
                     this.selectedContest = this.contests[0].id
+                    this.refreshContestData()
+                }
             }
         }
     }
