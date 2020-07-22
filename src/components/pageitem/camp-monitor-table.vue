@@ -108,7 +108,6 @@
                             })
                         }
                         that.isLoading = false
-                        console.log()
                     })
             }
         },

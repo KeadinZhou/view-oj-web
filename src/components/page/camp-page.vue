@@ -137,7 +137,6 @@
                 this.$http.get(api + '/v2/camp/summary')
                     .then(response => {
                         that.camp_list = response.data.data
-                        console.log(that.camp_list.length)
                         if (that.camp_list.length === 0) {
                             that.isReloading = false
                             return
