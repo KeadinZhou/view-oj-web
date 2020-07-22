@@ -28,7 +28,7 @@
                         </template>
                     </el-table-column>
                     <el-table-column label="Cnt" align="center" width="70" prop="count"
-                                     sortable :sort-method="function(a,b) {return Number(a.rating) - Number(b.rating)}">
+                                     sortable :sort-method="function(a,b) {return Number(a.count) - Number(b.count)}">
                         <template slot-scope="scope">
                             {{ scope.row.count }}
                         </template>
