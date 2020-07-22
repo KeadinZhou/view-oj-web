@@ -11,6 +11,11 @@
                             {{ scope.row.username }}
                         </template>
                     </el-table-column>
+                    <el-table-column label="Username" align="center">
+                        <template slot-scope="scope">
+                            {{ scope.row.nickname }}
+                        </template>
+                    </el-table-column>
                     <el-table-column label="OJ" align="center">
                         <template slot-scope="scope">
                             {{ scope.row.oj.name }}
