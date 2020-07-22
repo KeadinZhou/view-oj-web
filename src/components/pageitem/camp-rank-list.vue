@@ -89,6 +89,14 @@
         created() {
             this.getData()
         },
+        watch: {
+            camp_id() {
+                this.getData()
+            },
+            course_id() {
+                this.getData()
+            }
+        }
     }
 </script>
 

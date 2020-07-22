@@ -11,8 +11,11 @@
             <b>The monitor of Camps</b>
         </div>
         <el-container
-                v-loading="camp_list.length === 0">
-            <template v-if="camp_list.length !== 0">
+                v-loading="isReloading">
+            <template v-if="camp_list.length === 0">
+                <p class="centerBox">暂无数据</p>
+            </template>
+            <template v-else>
                 <el-aside>
                     <template v-if="$store.state.user.permission === 1">
                         <el-tooltip content="Edit camps" placement="top">
@@ -57,22 +60,20 @@
                         </div>
                     </el-menu>
                 </el-aside>
-                <el-main v-loading="isReloading">
-                    <template v-if="!isReloading">
-                        <el-tabs type="card">
-                            <el-tab-pane label="榜单">
-                                <camp-rank-list
-                                        :camp_id="camp_id"
-                                        :course_id="course_id"/>
-                            </el-tab-pane>
-                            <el-tab-pane label="填写账号" v-if="!isTotal && $store.state.user.userid">
-                                <camp-oj-set-table :course_id="course_id"></camp-oj-set-table>
-                            </el-tab-pane>
-                            <el-tab-pane label="比赛情况" v-if="!isTotal">
-                                <camp-monitor-table :contests="contests"></camp-monitor-table>
-                            </el-tab-pane>
-                        </el-tabs>
-                    </template>
+                <el-main>
+                    <el-tabs type="card">
+                        <el-tab-pane label="榜单">
+                            <camp-rank-list
+                                    :camp_id="camp_id"
+                                    :course_id="course_id"/>
+                        </el-tab-pane>
+                        <el-tab-pane label="填写账号" v-if="!isTotal && $store.state.user.userid">
+                            <camp-oj-set-table :course_id="course_id"></camp-oj-set-table>
+                        </el-tab-pane>
+                        <el-tab-pane label="比赛情况" v-if="!isTotal">
+                            <camp-monitor-table :contests="contests"></camp-monitor-table>
+                        </el-tab-pane>
+                    </el-tabs>
                 </el-main>
             </template>
         </el-container>
@@ -109,7 +110,6 @@
         methods: {
             menuSelected(index) {
                 if (this.courseIndex === index) return
-                this.isReloading = true
                 let sep = index.split('-')
                 this.camp_id = sep[0]
                 this.course_id = sep[1]
@@ -117,19 +117,11 @@
             },
             refreshCourseData() {
                 let that = this
-                if (this.course_id === 'total') {
-                    that.$nextTick(() => {
-                        that.isReloading = false
-                    })
-                    return
-                }
+                if (this.course_id === 'total') return
                 let api = this.$store.state.api
                 this.$http.get(api + '/v2/camp/course/' + this.course_id)
                     .then(response => {
                         that.contests = response.data.data.contests
-                        that.$nextTick(() => {
-                            that.isReloading = false
-                        })
                     })
                     .catch(error => {
                         if (error.response) {
@@ -141,11 +133,18 @@
                 let that = this
                 let api = this.$store.state.api
                 Object.assign(this.$data, this.$options.data())
+                that.isReloading = true
                 this.$http.get(api + '/v2/camp/summary')
                     .then(response => {
                         that.camp_list = response.data.data
+                        console.log(that.camp_list.length)
+                        if (that.camp_list.length === 0) {
+                            that.isReloading = false
+                            return
+                        }
                         that.camp_id = that.camp_list[0].id.toString()
                         that.course_id = 'total'
+                        that.isReloading = false
                         this.refreshCourseData()
                     })
                     .catch(error => {
