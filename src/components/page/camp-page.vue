@@ -115,10 +115,6 @@
                 this.camp_id = sep[0]
                 this.course_id = sep[1]
                 this.isRefresh = true
-                let that = this
-                this.$nextTick(() => {
-                    that.isRefresh = false
-                })
                 this.refreshCourseData()
             },
             refreshCourseData() {
@@ -128,6 +124,7 @@
                 this.$http.get(api + '/v2/camp/course/' + this.course_id)
                     .then(response => {
                         that.contests = response.data.data.contests
+                        that.isRefresh = false
                     })
                     .catch(error => {
                         if (error.response) {
