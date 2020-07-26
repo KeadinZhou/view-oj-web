@@ -15,7 +15,7 @@
                     </el-table-column>
                     <el-table-column label="Username" align="center">
                         <template slot-scope="scope">
-                            <b :style="'font-weight: 600;color:'+getColorForRating(scope.row.rating)">
+                            <b :style="'font-weight: 600;color:'+getColorForRating(scope.row)">
                                 {{ scope.row.nickname }}
                             </b>
                         </template>
@@ -47,15 +47,16 @@
             }
         },
         methods: {
-            getColorForRating(rating) {
-                if (rating <= 1600) return '#808080'
-                if (rating <= 1800) return '#008000'
-                if (rating <= 2000) return '#03a89e'
-                if (rating <= 2300) return '#0000ff'
-                if (rating <= 2500) return '#aa00aa'
-                if (rating <= 2800) return '#FF8C00'
-                if (rating <= 3000) return '#ff7777'
-                if (rating <= 3300) return '#ff0000'
+            getColorForRating(row) {
+                let rating = row.rating
+                if (rating <= 100) return '#808080'
+                if (rating <= 233) return '#008000'
+                if (rating <= 400) return '#03a89e'
+                if (rating <= 600) return '#0000ff'
+                if (rating <= 800) return '#aa00aa'
+                if (rating <= 1000) return '#FF8C00'
+                if (rating <= 1200) return '#ff7777'
+                if (rating <= 1500) return '#ff0000'
                 return '#aa0000'
             },
             reFreshChart() {
