@@ -1,16 +1,39 @@
 <template>
     <div>
-        <el-select
-                style="margin-bottom: 15px; width: 100%"
-                placeholder="Select a contest"
-                v-model="selectedContest"
-                popper-append-to-body>
-            <el-option
-                    v-for="contest of contests"
-                    :key="contest.id"
-                    :label="contest.name"
-                    :value="contest.id"/>
-        </el-select>
+        <el-dialog
+                title="添加比赛"
+                :visible.sync="isAppendDialogShow"
+                width="600px"
+                append-to-body>
+            <el-form label-position="left" v-model="appendForm" label-width="120px">
+                <el-form-item label="比赛名称">
+                    <el-input v-model="appendForm.name"/>
+                </el-form-item>
+                <el-form-item label="比赛cid">
+                    <el-input v-model="appendForm.contest_cid"/>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="initAppendForm">取 消</el-button>
+                <el-button type="primary" @click="submitAppendForm">确 定</el-button>
+            </div>
+        </el-dialog>
+        <div style="display: flex; margin-bottom: 15px">
+            <el-select
+                    style="flex-grow: 1; margin-right: 5px"
+                    placeholder="Select a contest"
+                    v-model="selectedContest"
+                    popper-append-to-body>
+                <el-option
+                        v-for="contest of contests"
+                        :key="contest.id"
+                        :label="contest.name"
+                        :value="contest.id"/>
+            </el-select>
+            <el-tooltip v-if="$store.state.user.permission===1" content="append contest" placement="top">
+                <el-button class="el-icon-plus" @click="isAppendDialogShow = true"/>
+            </el-tooltip>
+        </div>
         <template v-if="selectedContest !== ''">
             <el-card shadow="never">
                 <el-table
@@ -67,6 +90,7 @@
     export default {
         name: "camp-monitor-table",
         props: {
+            course_id: String,
             contests: Array,
         },
         data() {
@@ -75,6 +99,11 @@
                 tableData: [],
                 proList: [],
                 selectedContest: '',
+                isAppendDialogShow: false,
+                appendForm: {
+                    'name': '',
+                    'contest_cid': ''
+                }
             }
         },
         methods: {
@@ -110,6 +139,35 @@
                         }
                         that.isLoading = false
                     })
+            },
+            initAppendForm() {
+                Object.assign(this.appendForm, this.$options.data().appendForm)
+                this.isAppendDialogShow = false
+            },
+            submitAppendForm() {
+                if (this.appendForm.name === '') {
+                    this.$message.error('比赛名称不能为空')
+                    return
+                }
+                if (this.appendForm.contest_cid === '') {
+                    this.$message.error('比赛cid不能为空')
+                    return
+                }
+                let api = this.$store.state.api
+                let that = this
+                this.$http.post(api + '/v2/camp/course/' + this.course_id + '/append_contest', {
+                    name: that.appendForm.name,
+                    contest_cid: that.appendForm.contest_cid
+                }).then(response => {
+                    that.$message.success(response.data.msg)
+                    that.initAppendForm()
+                }).catch(error => {
+                    if (error.response) {
+                        that.$message.error(error.response.data.msg)
+                    } else {
+                        that.$message.error('无法连接至服务器')
+                    }
+                })
             }
         },
         created() {

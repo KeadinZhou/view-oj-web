@@ -71,7 +71,7 @@
                             <camp-oj-set-table :course_id="course_id"></camp-oj-set-table>
                         </el-tab-pane>
                         <el-tab-pane label="比赛情况" v-if="!isTotal">
-                            <camp-monitor-table :contests="contests"></camp-monitor-table>
+                            <camp-monitor-table :course_id="course_id" :contests="contests"></camp-monitor-table>
                         </el-tab-pane>
                     </el-tabs>
                 </el-main>
