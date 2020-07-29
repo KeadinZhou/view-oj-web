@@ -8,18 +8,34 @@
                             {{ scope.$index + 1 }}
                         </template>
                     </el-table-column>
-                    <el-table-column label="UserID" align="center">
-                        <template slot-scope="scope">
-                            {{ scope.row.username }}
-                        </template>
-                    </el-table-column>
-                    <el-table-column label="Username" align="center">
-                        <template slot-scope="scope">
-                            <b :style="'font-weight: 600;color:'+getColorForRating(scope.row)">
-                                {{ scope.row.nickname }}
-                            </b>
-                        </template>
-                    </el-table-column>
+                    <template v-if="course_id!=='total'">
+                        <el-table-column label="Teamname" align="center">
+                            <template slot-scope="scope">
+                                <el-popover
+                                    trigger="hover"
+                                    placement="top"
+                                    :content="getMembersStr(scope.row.members)">
+                                    <b slot="reference" :style="'font-weight: 600;color:'+getColorForRating(scope.row)">
+                                        {{ scope.row.team_name }}
+                                    </b>
+                                </el-popover>
+                            </template>
+                        </el-table-column>
+                    </template>
+                    <template v-else>
+                        <el-table-column label="UserID" align="center">
+                            <template slot-scope="scope">
+                                {{ scope.row.username }}
+                            </template>
+                        </el-table-column>
+                        <el-table-column label="Username" align="center">
+                            <template slot-scope="scope">
+                                <b :style="'font-weight: 600;color:'+getColorForRating(scope.row)">
+                                    {{ scope.row.nickname }}
+                                </b>
+                            </template>
+                        </el-table-column>
+                    </template>
                     <el-table-column label="Rating" align="center" width="100px" prop="rating" sortable
                                      :sort-method="function(a,b) {return Number(a.rating) - Number(b.rating)}">
                         <template slot-scope="scope">
@@ -33,79 +49,86 @@
 </template>
 
 <script>
-    export default {
-        name: 'camp-rank-list',
-        props: {
-            camp_id: String,
-            course_id: String
-        },
-        data() {
-            return {
-                loading: false,
-                isRefresh: true,
-                tableData: [],
+export default {
+    name: 'camp-rank-list',
+    props: {
+        camp_id: String,
+        course_id: String
+    },
+    data() {
+        return {
+            loading: false,
+            isRefresh: true,
+            tableData: [],
+        }
+    },
+    methods: {
+        getMembersStr(members) {
+            let s = '团队成员:'
+            for (let member of members) {
+                s += ' ' + member.nickname
             }
+            return s
         },
-        methods: {
-            getColorForRating(row) {
-                let rating = row.rating
-                if (rating <= 100) return '#808080'
-                if (rating <= 233) return '#008000'
-                if (rating <= 400) return '#03a89e'
-                if (rating <= 600) return '#0000ff'
-                if (rating <= 800) return '#aa00aa'
-                if (rating <= 1000) return '#FF8C00'
-                if (rating <= 1200) return '#ff7777'
-                if (rating <= 1500) return '#ff0000'
-                return '#aa0000'
-            },
-            reFreshChart() {
-                this.isRefresh = false
-                this.$nextTick(function () {
-                    this.isRefresh = true
-                    this.loading = false
+        getColorForRating(row) {
+            let rating = row.rating
+            if (rating <= 100) return '#808080'
+            if (rating <= 233) return '#008000'
+            if (rating <= 400) return '#03a89e'
+            if (rating <= 600) return '#0000ff'
+            if (rating <= 800) return '#aa00aa'
+            if (rating <= 1000) return '#FF8C00'
+            if (rating <= 1200) return '#ff7777'
+            if (rating <= 1500) return '#ff0000'
+            return '#aa0000'
+        },
+        reFreshChart() {
+            this.isRefresh = false
+            this.$nextTick(function () {
+                this.isRefresh = true
+                this.loading = false
+            })
+        },
+        getData() {
+            this.loading = true
+            let api = this.$store.state.api
+            let that = this
+            let loc = ''
+            if (this.course_id === 'total')
+                loc = api + '/v2/camp/' + this.camp_id + '/rating'
+            else
+                loc = api + '/v2/camp/course/' + this.course_id + '/rating'
+            that.$http.get(loc)
+                .then(data => {
+                    that.tableData = data.data.data
+                    that.reFreshChart()
                 })
-            },
-            getData() {
-                this.loading = true
-                let api = this.$store.state.api
-                let that = this
-                let loc = ''
-                if (this.course_id === 'total')
-                    loc = api + '/v2/camp/' + this.camp_id + '/rating'
-                else
-                    loc = api + '/v2/camp/course/' + this.course_id + '/rating'
-                that.$http.get(loc)
-                    .then(data => {
-                        that.tableData = data.data.data
-                        that.reFreshChart()
-                    })
-                    .catch(function (error) {
-                        if (error.response) {
-                            that.$message.error(error.response.data.msg)
-                        }
-                    })
-            }
-        },
-        created() {
+                .catch(function (error) {
+                    if (error.response) {
+                        that.$message.error(error.response.data.msg)
+                    }
+                })
+        }
+    },
+    created() {
+        this.getData()
+    },
+    watch: {
+        camp_id() {
             this.getData()
         },
-        watch: {
-            camp_id() {
-                this.getData()
-            },
-            course_id() {
-                this.getData()
-            }
+        course_id() {
+            this.getData()
         }
     }
+}
 </script>
 
 <style scoped>
-    .tableBox {
-        position: relative;
-        left: 50%;
-        width: 700px;
-        transform: translate(-50%, 0);
-    }
+.tableBox {
+    position: relative;
+    left: 50%;
+    width: 700px;
+    transform: translate(-50%, 0);
+}
 </style>
