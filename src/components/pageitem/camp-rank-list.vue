@@ -15,12 +15,15 @@
                                     trigger="hover"
                                     placement="top"
                                     :content="getMembersStr(scope.row.members)">
-                                    <b slot="reference"
-                                       style="font-weight: 600;">
-                                        <span :style="'color:'+getColorForRating(scope.row)[0]">{{
+                                    <b slot="reference" style="font-weight: 600;">
+                                        <span :style="'border-top-left-radius:5px; border-bottom-left-radius: 5px;' +
+                                         'padding:3px; padding-right:0px; color:'+getNameColor(scope.row)[0]+
+                                        ';background-color:'+getNameColorBack(scope.row)[0]">{{
                                                 scope.row.team_name[0]
                                             }}</span>
-                                        <span :style="'color:'+getColorForRating(scope.row)[1]">{{
+                                        <span :style="'border-top-right-radius:5px; border-bottom-right-radius: 5px;' +
+                                         'padding:3px; padding-left:0px; color:'+getNameColor(scope.row)[1]+
+                                        ';background-color:'+getNameColorBack(scope.row)[1]">{{
                                                 scope.row.team_name.slice(1)
                                             }}</span>
                                     </b>
@@ -37,10 +40,14 @@
                         <el-table-column label="Username" align="center">
                             <template slot-scope="scope">
                                 <b slot="reference" style="font-weight: 600;">
-                                    <span :style="'color:'+getColorForRating(scope.row)[0]">{{
-                                            scope.row.nickname.charAt(0)
+                                    <span :style="'border-top-left-radius:5px; border-bottom-left-radius: 5px;' +
+                                         'padding:3px; padding-right:0px; color:'+getNameColor(scope.row)[0]+
+                                        ';background-color:'+getNameColorBack(scope.row)[0]">{{
+                                            scope.row.nickname[0]
                                         }}</span>
-                                    <span :style="'color:'+getColorForRating(scope.row)[1]">{{
+                                    <span :style="'border-top-right-radius:5px; border-bottom-right-radius: 5px;' +
+                                         'padding:3px; padding-left:0px; color:'+getNameColor(scope.row)[1]+
+                                        ';background-color:'+getNameColorBack(scope.row)[1]">{{
                                             scope.row.nickname.slice(1)
                                         }}</span>
                                 </b>
@@ -81,7 +88,8 @@ export default {
             }
             return s
         },
-        getColorForRating(row) {
+        getNameColor(row) {
+            if (row.nickname === '苗皓淇') return ['#ffffff', '#000000']
             let rating = row.rating
             if (rating <= 100) return ['#808080', '#808080']
             if (rating <= 233) return ['#008000', '#008000']
@@ -91,6 +99,10 @@ export default {
             if (rating <= 1000) return ['#FF8C00', '#FF8C00']
             if (rating <= 1200) return ['#ff0000', '#ff0000']
             return ['#000000', '#ff0000']
+        },
+        getNameColorBack(row) {
+            if (row.nickname === '苗皓淇') return ['#000000', '#ff9900']
+            return ['rgba(0, 0, 0, 0)', 'rgba(0, 0, 0, 0)']
         },
         reFreshChart() {
             this.isRefresh = false

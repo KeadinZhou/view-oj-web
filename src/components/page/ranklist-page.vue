@@ -24,10 +24,14 @@
                         <template slot-scope="scope">
                             <el-link :href="'#/user/'+scope.row.username+'?part=page-top'" :underline="false">
                                 <b style="'font-weight: 900'">
-                                    <span :style="'color:'+getColorForRating(scope.row)[0]">{{
+                                    <span :style="'border-top-left-radius:5px; border-bottom-left-radius: 5px;' +
+                                         'padding:3px; padding-right:0px; color:'+getNameColor(scope.row)[0]+
+                                        ';background-color:'+getNameColorBack(scope.row)[0]">{{
                                             scope.row.nickname[0]
                                         }}</span>
-                                    <span :style="'color:'+getColorForRating(scope.row)[1]">{{
+                                    <span :style="'border-top-right-radius:5px; border-bottom-right-radius: 5px;' +
+                                         'padding:3px; padding-left:0px; color:'+getNameColor(scope.row)[1]+
+                                        ';background-color:'+getNameColorBack(scope.row)[1]">{{
                                             scope.row.nickname.slice(1)
                                         }}</span>
                                 </b>
@@ -73,7 +77,8 @@ export default {
         }
     },
     methods: {
-        getColorForRating(row) {
+        getNameColor(row) {
+            if (row.nickname === '苗皓淇') return ['#ffffff', '#000000']
             let rating = row.rating
             if (rating <= 1500) return ['#808080', '#808080']
             if (rating <= 1600) return ['#008000', '#008000']
@@ -84,6 +89,10 @@ export default {
             if (rating <= 2800) return ['#ff7777', '#ff7777']
             if (rating <= 3000) return ['#ff0000', '#ff0000']
             return ['#000000', '#ff0000']
+        },
+        getNameColorBack(row) {
+            if (row.nickname === '苗皓淇') return ['#000000', '#ff9900']
+            return ['rgba(0, 0, 0, 0)', 'rgba(0, 0, 0, 0)']
         },
         gotoDetail(row) {
             this.$router.push('/user/' + row.username + '?part=rating')
