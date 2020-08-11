@@ -15,8 +15,14 @@
                                     trigger="hover"
                                     placement="top"
                                     :content="getMembersStr(scope.row.members)">
-                                    <b slot="reference" :style="'font-weight: 600;color:'+getColorForRating(scope.row)">
-                                        {{ scope.row.team_name }}
+                                    <b slot="reference"
+                                       style="font-weight: 600;">
+                                        <span :style="'color:'+getColorForRating(scope.row)[0]">{{
+                                                scope.row.team_name[0]
+                                            }}</span>
+                                        <span :style="'color:'+getColorForRating(scope.row)[1]">{{
+                                                scope.row.team_name.slice(1)
+                                            }}</span>
                                     </b>
                                 </el-popover>
                             </template>
@@ -30,8 +36,13 @@
                         </el-table-column>
                         <el-table-column label="Username" align="center">
                             <template slot-scope="scope">
-                                <b :style="'font-weight: 600;color:'+getColorForRating(scope.row)">
-                                    {{ scope.row.nickname }}
+                                <b slot="reference" style="font-weight: 600;">
+                                    <span :style="'color:'+getColorForRating(scope.row)[0]">{{
+                                            scope.row.nickname.charAt(0)
+                                        }}</span>
+                                    <span :style="'color:'+getColorForRating(scope.row)[1]">{{
+                                            scope.row.nickname.slice(1)
+                                        }}</span>
                                 </b>
                             </template>
                         </el-table-column>
@@ -72,15 +83,14 @@ export default {
         },
         getColorForRating(row) {
             let rating = row.rating
-            if (rating <= 100) return '#808080'
-            if (rating <= 233) return '#008000'
-            if (rating <= 400) return '#03a89e'
-            if (rating <= 600) return '#0000ff'
-            if (rating <= 800) return '#aa00aa'
-            if (rating <= 1000) return '#FF8C00'
-            if (rating <= 1200) return '#ff7777'
-            if (rating <= 1500) return '#ff0000'
-            return '#aa0000'
+            if (rating <= 100) return ['#808080', '#808080']
+            if (rating <= 233) return ['#008000', '#008000']
+            if (rating <= 400) return ['#03a89e', '#03a89e']
+            if (rating <= 600) return ['#0000ff', '#0000ff']
+            if (rating <= 800) return ['#aa00aa', '#aa00aa']
+            if (rating <= 1000) return ['#FF8C00', '#FF8C00']
+            if (rating <= 1200) return ['#ff0000', '#ff0000']
+            return ['#000000', '#ff0000']
         },
         reFreshChart() {
             this.isRefresh = false
