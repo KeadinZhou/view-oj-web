@@ -89,7 +89,7 @@ export default {
             return s
         },
         getNameColor(row) {
-            if (row.user.name_color) return row.user.name_color
+            if (row.user && row.user.name_color) return row.user.name_color
             let rating = row.rating
             if (rating <= 100) return ['#808080', '#808080']
             if (rating <= 233) return ['#008000', '#008000']
@@ -101,7 +101,7 @@ export default {
             return ['#000000', '#ff0000']
         },
         getNameColorBack(row) {
-            if (row.user.name_back_color) return row.user.name_back_color
+            if (row.user && row.user.name_back_color) return row.user.name_back_color
             return ['rgba(0, 0, 0, 0)', 'rgba(0, 0, 0, 0)']
         },
         reFreshChart() {
