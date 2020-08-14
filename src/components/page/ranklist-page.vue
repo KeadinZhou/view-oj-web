@@ -78,11 +78,11 @@ export default {
     },
     methods: {
         getNameColor(row) {
-            if (row.nickname === '苗皓淇') return ['#ffffff', '#000000']
+            if (row.name_color) return row.name_color
             let rating = row.rating
             if (rating <= 1500) return ['#808080', '#808080']
             if (rating <= 1600) return ['#008000', '#008000']
-            if (rating <= 1800) return ['#03a89e', '#03a89e']
+            if (rating <= 1800) return ['#03a89e', '#fcfcfc']
             if (rating <= 2000) return ['#0000ff', '#0000ff']
             if (rating <= 2200) return ['#aa00aa', '#aa00aa']
             if (rating <= 2500) return ['#ff8c00', '#ff8c00']
@@ -91,7 +91,7 @@ export default {
             return ['#000000', '#ff0000']
         },
         getNameColorBack(row) {
-            if (row.nickname === '苗皓淇') return ['#000000', '#ff9900']
+            if (row.name_back_color) return row.name_back_color
             return ['rgba(0, 0, 0, 0)', 'rgba(0, 0, 0, 0)']
         },
         gotoDetail(row) {

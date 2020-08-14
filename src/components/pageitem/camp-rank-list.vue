@@ -34,7 +34,7 @@
                     <template v-else>
                         <el-table-column label="UserID" align="center">
                             <template slot-scope="scope">
-                                {{ scope.row.username }}
+                                {{ scope.row.user.username }}
                             </template>
                         </el-table-column>
                         <el-table-column label="Username" align="center">
@@ -43,12 +43,12 @@
                                     <span :style="'border-top-left-radius:5px; border-bottom-left-radius: 5px;' +
                                          'padding:3px; padding-right:0px; color:'+getNameColor(scope.row)[0]+
                                         ';background-color:'+getNameColorBack(scope.row)[0]">{{
-                                            scope.row.nickname[0]
+                                            scope.row.user.nickname[0]
                                         }}</span>
                                     <span :style="'border-top-right-radius:5px; border-bottom-right-radius: 5px;' +
                                          'padding:3px; padding-left:0px; color:'+getNameColor(scope.row)[1]+
                                         ';background-color:'+getNameColorBack(scope.row)[1]">{{
-                                            scope.row.nickname.slice(1)
+                                            scope.row.user.nickname.slice(1)
                                         }}</span>
                                 </b>
                             </template>
@@ -89,7 +89,7 @@ export default {
             return s
         },
         getNameColor(row) {
-            if (row.nickname === '苗皓淇') return ['#ffffff', '#000000']
+            if (row.user.name_color) return row.user.name_color
             let rating = row.rating
             if (rating <= 100) return ['#808080', '#808080']
             if (rating <= 233) return ['#008000', '#008000']
@@ -101,7 +101,7 @@ export default {
             return ['#000000', '#ff0000']
         },
         getNameColorBack(row) {
-            if (row.nickname === '苗皓淇') return ['#000000', '#ff9900']
+            if (row.user.name_back_color) return row.user.name_back_color
             return ['rgba(0, 0, 0, 0)', 'rgba(0, 0, 0, 0)']
         },
         reFreshChart() {
