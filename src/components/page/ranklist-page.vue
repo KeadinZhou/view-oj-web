@@ -23,15 +23,13 @@
                     <el-table-column label="Username" align="center">
                         <template slot-scope="scope">
                             <el-link :href="'#/user/'+scope.row.username+'?part=page-top'" :underline="false">
-                                <b style="'font-weight: 900'">
+                                <b class="ColoredName" :style="getNameColorInfo(scope.row, 2)">
                                     <span :style="'border-top-left-radius:5px; border-bottom-left-radius: 5px;' +
-                                         'padding:3px; padding-right:0px; color:'+getNameColor(scope.row)[0]+
-                                        ';background-color:'+getNameColorBack(scope.row)[0]">{{
+                                         'padding:3px; padding-right:0px;'+getNameColorInfo(scope.row, 0)">{{
                                             scope.row.nickname[0]
                                         }}</span>
                                     <span :style="'border-top-right-radius:5px; border-bottom-right-radius: 5px;' +
-                                         'padding:3px; padding-left:0px; color:'+getNameColor(scope.row)[1]+
-                                        ';background-color:'+getNameColorBack(scope.row)[1]">{{
+                                         'padding:3px; padding-left:0px;'+getNameColorInfo(scope.row, 1)">{{
                                             scope.row.nickname.slice(1)
                                         }}</span>
                                 </b>
@@ -77,8 +75,18 @@ export default {
         }
     },
     methods: {
+        getNameColorInfo(row, index) {
+            let s = ''
+            if (row.custom_color) {
+                return row.custom_color[index]
+            }
+            let color = this.getNameColor(row)
+            let back_color = this.getNameColorBack(row)
+            s += 'color: ' + color[index] + ';'
+            s += 'background-color: ' + back_color[index] + ';'
+            return s
+        },
         getNameColor(row) {
-            if (row.name_color) return row.name_color
             let rating = row.rating
             if (rating <= 1500) return ['#808080', '#808080']
             if (rating <= 1600) return ['#008000', '#008000']
@@ -91,7 +99,7 @@ export default {
             return ['#000000', '#ff0000']
         },
         getNameColorBack(row) {
-            if (row.name_back_color) return row.name_back_color
+            (row)
             return ['rgba(0, 0, 0, 0)', 'rgba(0, 0, 0, 0)']
         },
         gotoDetail(row) {
@@ -147,5 +155,11 @@ export default {
     left: 50%;
     width: 800px;
     transform: translate(-50%, 0);
+}
+
+.ColoredName {
+    font-weight: 600;
+    padding: 3px 0 3px 0;
+    border-radius: 5px;
 }
 </style>

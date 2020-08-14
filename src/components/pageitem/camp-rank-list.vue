@@ -15,16 +15,15 @@
                                     trigger="hover"
                                     placement="top"
                                     :content="getMembersStr(scope.row.members)">
-                                    <b slot="reference" style="font-weight: 600;">
-                                        <span :style="'border-top-left-radius:5px; border-bottom-left-radius: 5px;' +
-                                         'padding:3px; padding-right:0px; color:'+getNameColor(scope.row)[0]+
-                                        ';background-color:'+getNameColorBack(scope.row)[0]">{{
-                                                scope.row.team_name[0]
-                                            }}</span>
+                                    <b slot="reference" class="ColoredName"
+                                       :style="getNameColorInfo(scope.row, 2)">
+                                    <span :style="'border-top-left-radius:5px; border-bottom-left-radius: 5px;' +
+                                         'padding:3px; padding-right:0px;'+getNameColorInfo(scope.row, 0)">{{
+                                            scope.row.user.team_name[0]
+                                        }}</span>
                                         <span :style="'border-top-right-radius:5px; border-bottom-right-radius: 5px;' +
-                                         'padding:3px; padding-left:0px; color:'+getNameColor(scope.row)[1]+
-                                        ';background-color:'+getNameColorBack(scope.row)[1]">{{
-                                                scope.row.team_name.slice(1)
+                                         'padding:3px; padding-left:0px;'+getNameColorInfo(scope.row, 1)">{{
+                                                scope.row.user.team_name.slice(1)
                                             }}</span>
                                     </b>
                                 </el-popover>
@@ -32,29 +31,28 @@
                         </el-table-column>
                     </template>
                     <template v-else>
-                        <el-table-column label="UserID" align="center">
+                        <el-table-column label=" UserID" align="center">
                             <template slot-scope="scope">
                                 {{ scope.row.user.username }}
                             </template>
                         </el-table-column>
                         <el-table-column label="Username" align="center">
                             <template slot-scope="scope">
-                                <b slot="reference" style="font-weight: 600;">
+                                <b slot="reference" class="ColoredName"
+                                   :style="getNameColorInfo(scope.row, 2)">
                                     <span :style="'border-top-left-radius:5px; border-bottom-left-radius: 5px;' +
-                                         'padding:3px; padding-right:0px; color:'+getNameColor(scope.row)[0]+
-                                        ';background-color:'+getNameColorBack(scope.row)[0]">{{
+                                         'padding:3px; padding-right:0px;'+getNameColorInfo(scope.row, 0)">{{
                                             scope.row.user.nickname[0]
                                         }}</span>
                                     <span :style="'border-top-right-radius:5px; border-bottom-right-radius: 5px;' +
-                                         'padding:3px; padding-left:0px; color:'+getNameColor(scope.row)[1]+
-                                        ';background-color:'+getNameColorBack(scope.row)[1]">{{
+                                         'padding:3px; padding-left:0px;'+getNameColorInfo(scope.row, 1)">{{
                                             scope.row.user.nickname.slice(1)
                                         }}</span>
                                 </b>
                             </template>
                         </el-table-column>
                     </template>
-                    <el-table-column label="Rating" align="center" width="100px" prop="rating" sortable
+                    <el-table-column label=" Rating" align="center" width="100px" prop="rating" sortable
                                      :sort-method="function(a,b) {return Number(a.rating) - Number(b.rating)}">
                         <template slot-scope="scope">
                             {{ scope.row.rating }}
@@ -88,8 +86,18 @@ export default {
             }
             return s
         },
+        getNameColorInfo(row, index) {
+            let s = ''
+            if (row.user && row.user.custom_color) {
+                return row.user.custom_color[index]
+            }
+            let color = this.getNameColor(row)
+            let back_color = this.getNameColorBack(row)
+            s += 'color: ' + color[index] + ';'
+            s += 'background-color: ' + back_color[index] + ';'
+            return s
+        },
         getNameColor(row) {
-            if (row.user && row.user.name_color) return row.user.name_color
             let rating = row.rating
             if (rating <= 100) return ['#808080', '#808080']
             if (rating <= 233) return ['#008000', '#008000']
@@ -101,7 +109,7 @@ export default {
             return ['#000000', '#ff0000']
         },
         getNameColorBack(row) {
-            if (row.user && row.user.name_back_color) return row.user.name_back_color
+            (row)
             return ['rgba(0, 0, 0, 0)', 'rgba(0, 0, 0, 0)']
         },
         reFreshChart() {
@@ -152,5 +160,11 @@ export default {
     left: 50%;
     width: 700px;
     transform: translate(-50%, 0);
+}
+
+.ColoredName {
+    font-weight: 600;
+    padding: 3px 0 3px 0;
+    border-radius: 5px;
 }
 </style>
