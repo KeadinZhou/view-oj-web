@@ -40,6 +40,7 @@
         },
         methods: {
             getData() {
+                if (this.$store.state.debug) return
                 var that = this
                 that.$http.get(this.api + '/v2/task/summary')
                     .then(data => {
