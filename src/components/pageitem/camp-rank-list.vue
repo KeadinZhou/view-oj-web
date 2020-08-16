@@ -19,11 +19,11 @@
                                        :style="getNameColorInfo(scope.row, 2)">
                                     <span :style="'border-top-left-radius:5px; border-bottom-left-radius: 5px;' +
                                          'padding:3px; padding-right:0px;'+getNameColorInfo(scope.row, 0)">{{
-                                            scope.row.user.team_name[0]
+                                            scope.row.team_name[0]
                                         }}</span>
                                         <span :style="'border-top-right-radius:5px; border-bottom-right-radius: 5px;' +
                                          'padding:3px; padding-left:0px;'+getNameColorInfo(scope.row, 1)">{{
-                                                scope.row.user.team_name.slice(1)
+                                                scope.row.team_name.slice(1)
                                             }}</span>
                                     </b>
                                 </el-popover>
