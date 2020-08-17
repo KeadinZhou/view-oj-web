@@ -90,7 +90,7 @@ export default {
             let rating = row.rating
             if (rating <= 1500) return ['#808080', '#808080']
             if (rating <= 1600) return ['#008000', '#008000']
-            if (rating <= 1800) return ['#03a89e', '#fcfcfc']
+            if (rating <= 1800) return ['#03a89e', '#03a89e']
             if (rating <= 2000) return ['#0000ff', '#0000ff']
             if (rating <= 2200) return ['#aa00aa', '#aa00aa']
             if (rating <= 2500) return ['#ff8c00', '#ff8c00']
