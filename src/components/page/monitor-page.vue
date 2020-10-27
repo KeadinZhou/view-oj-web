@@ -261,7 +261,7 @@
             },
             renameSet(SET) {
                 const that = this
-                that.$http.patch(this.api + '/v2/problem_set/' + SET.id, {
+                that.$http.put(this.api + '/v2/problem_set/' + SET.id, {
                     name: SET.name
                 })
                     .then(data => {

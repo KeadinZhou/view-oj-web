@@ -162,7 +162,7 @@ var mutations = {
             })
     },
     modifyUserInfo(state, data) {
-        state.page.$http.patch(api + '/v2/user/' + data.username, data)
+        state.page.$http.put(api + '/v2/user/' + data.username, data)
             .then(data => {
                 state.page.$message.success(data.data.msg)
             })
@@ -252,7 +252,7 @@ var mutations = {
             })
     },
     modifyUserNameBySelf(state, username) {
-        state.page.$http.patch(api + '/v2/user/' + state.user.userid, {
+        state.page.$http.put(api + '/v2/user/' + state.user.userid, {
             nickname: username
         })
             .then(data => {
