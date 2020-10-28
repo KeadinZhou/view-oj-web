@@ -40,11 +40,19 @@ export default {
   },
   computed: {
     filtered_grades() {
-      console.log(this.$store.state.OverviewGrade)
-      return Array.from(this.$store.state.OverviewGrade).filter((a) => {
+      let arr = Array.from(this.$store.state.OverviewGrade).filter((a) => {
         if (this.isFreshman) return a.includes("-")
         else return !a.includes("-")
       })
+      let array = []
+      let cur = this.$store.state.user.username
+      if (cur === '') return arr
+      let array2 = []
+      for (let grade of arr) {
+        if (grade.includes(cur)) array.push(grade)
+        else array2.push(grade)
+      }
+      return array.concat(array2)
     }
   },
   data() {
