@@ -16,6 +16,7 @@ var state = {
         status: '',
         isUpdated: false
     },
+    backendVersion: "",
     OverviewData: [],
     OverviewGrade: [],
     OverviewIsFreshman: false,
@@ -30,6 +31,12 @@ var state = {
 var mutations = {
     savePage(state, page) {
         state.page = page
+    },
+    saveBackendVersion(state) {
+        state.page.$http.get(api + '/v2/meta/version')
+            .then(data => {
+                state.backendVersion = data.data.version
+            })
     },
     updateUser(state) {
         state.page.$http.get(api + '/v2/session')
