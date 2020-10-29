@@ -28,15 +28,24 @@
 import OverviewChart from '@/components/charts/overview-chart'
 
 export default {
-  name: 'index-page',
+  name: 'freshman-page',
   components: {
     'overview-chart': OverviewChart
   },
   computed: {
     filtered_grades() {
-      return Array.from(this.$store.state.OverviewGrade).filter((a) => {
-        return !a.includes("-")
+      let arr = Array.from(this.$store.state.OverviewGrade).filter((a) => {
+        return a.includes("-")
       })
+      let array = []
+      let cur = this.$store.state.user.username
+      if (cur === '') return arr
+      let array2 = []
+      for (let grade of arr) {
+        if (grade.includes(cur)) array.push(grade)
+        else array2.push(grade)
+      }
+      return array.concat(array2)
     }
   },
   data() {
@@ -97,7 +106,7 @@ export default {
     }
   },
   created() {
-    document.title = "Home - viewOJ"
+    document.title = "Freshman - viewOJ"
     this.changeOverviewDate()
   },
   methods: {

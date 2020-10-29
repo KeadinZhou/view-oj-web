@@ -12,6 +12,13 @@ export default new Router({
             meta: {
                 title: 'Home - viewOJ'
             }
+        },{
+            path: '/freshman',
+            name: 'freshman-page',
+            component: () => import('@/components/page/freshman-page'),
+            meta: {
+                title: 'Freshman - viewOJ'
+            }
         }, {
             path: '/admin',
             name: 'admin-page',
