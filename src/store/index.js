@@ -18,6 +18,7 @@ var state = {
     },
     OverviewData: [],
     OverviewGrade: [],
+    OverviewIsFreshman: false,
     OJlist: null, // Map
     UserallChartData: [],
     Userlist: null, // Map
@@ -81,6 +82,7 @@ var mutations = {
             })
     },
     updateOverview(state, data) {
+        state.OverviewIsFreshman = data.is_freshman
         state.OverviewData = []
         state.OverviewGrade = new Set()
         var i

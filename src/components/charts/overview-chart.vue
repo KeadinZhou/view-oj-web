@@ -1,7 +1,7 @@
 <template>
   <div class="chart-box">
     <div class="chartTitle">
-      <b>Training status chart of {{ this.grade.includes('-') ? 'Group ' + this.grade.split('-')[1] : 'Grade ' + this.grade }}</b>
+      <b>Training status chart of {{ ($store.state.OverviewIsFreshman ? 'Group ' : 'Grade ') + this.grade }}</b>
     </div>
     <div class="chartSubTitle">
       {{
