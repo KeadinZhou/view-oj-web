@@ -16,7 +16,7 @@
     </div>
     <template v-if="isRefresh">
       <overview-chart
-          v-for="item in filtered_grades"
+          v-for="item in $store.state.OverviewGrade"
           :grade="item"
           :daterange="inputDate"
           :key="item"/>
@@ -31,13 +31,6 @@ export default {
   name: 'index-page',
   components: {
     'overview-chart': OverviewChart
-  },
-  computed: {
-    filtered_grades() {
-      return Array.from(this.$store.state.OverviewGrade).filter((a) => {
-        return !a.includes("-")
-      })
-    }
   },
   data() {
     return {
@@ -102,10 +95,16 @@ export default {
   },
   methods: {
     changeOverviewDate() {
-      this.$store.commit('updateOverview', this.inputDate !== null && this.inputDate.length === 2 ? {
-        start_date: this.inputDate[0],
-        end_date: this.inputDate[1]
-      } : null)
+      let data = {
+        start_date: null,
+        end_date: null,
+        is_freshman: false
+      }
+      if (this.inputDate !== null && this.inputDate.length === 2) {
+        data.start_date = this.inputDate[0]
+        data.end_date = this.inputDate[1]
+      }
+      this.$store.commit('updateOverview', data)
       this.isRefresh = false
       this.$nextTick(function () {
         this.isRefresh = true

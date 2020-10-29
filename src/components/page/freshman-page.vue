@@ -32,22 +32,6 @@ export default {
   components: {
     'overview-chart': OverviewChart
   },
-  computed: {
-    filtered_grades() {
-      let arr = Array.from(this.$store.state.OverviewGrade).filter((a) => {
-        return a.includes("-")
-      })
-      let array = []
-      let cur = this.$store.state.user.username
-      if (cur === '') return arr
-      let array2 = []
-      for (let grade of arr) {
-        if (grade.includes(cur)) array.push(grade)
-        else array2.push(grade)
-      }
-      return array.concat(array2)
-    }
-  },
   data() {
     return {
       isRefresh: true,
@@ -105,16 +89,34 @@ export default {
       }
     }
   },
+  computed: {
+    filtered_grades() {
+      let arr1 = []
+      let arr2 = []
+      let cur = this.$store.state.user.username
+      for (let grade of this.$store.state.OverviewGrade) {
+        if (grade === cur) arr1.push(grade)
+        else arr2.push(grade)
+      }
+      return arr1.concat(arr2)
+    }
+  },
   created() {
     document.title = "Freshman - viewOJ"
     this.changeOverviewDate()
   },
   methods: {
     changeOverviewDate() {
-      this.$store.commit('updateOverview', this.inputDate !== null && this.inputDate.length === 2 ? {
-        start_date: this.inputDate[0],
-        end_date: this.inputDate[1]
-      } : null)
+      let data = {
+        start_date: null,
+        end_date: null,
+        is_freshman: true
+      }
+      if (this.inputDate !== null && this.inputDate.length === 2) {
+        data.start_date = this.inputDate[0]
+        data.end_date = this.inputDate[1]
+      }
+      this.$store.commit('updateOverview', data)
       this.isRefresh = false
       this.$nextTick(function () {
         this.isRefresh = true

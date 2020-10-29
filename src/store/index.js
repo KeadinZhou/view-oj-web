@@ -80,11 +80,11 @@ var mutations = {
                 }
             })
     },
-    updateOverview(state, date) {
+    updateOverview(state, data) {
         state.OverviewData = []
         state.OverviewGrade = new Set()
         var i
-        state.page.$http.get(api + '/v2/accept_problem/summary', {params: date || null})
+        state.page.$http.get(api + '/v2/accept_problem/summary', {params: data})
             .then(data => {
                 for (i in data.data.data) {
                     var item = data.data.data[i]
