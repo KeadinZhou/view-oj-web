@@ -126,7 +126,7 @@ export default {
             that.tableData = []
             for (var item of data.data.data) {
               if (item.is_freshman && !that.showFreshman) continue
-              if (item.status === 1 && !that.showAll) continue
+              if (item.status !== 1 && !that.showAll) continue
               that.tableData.push(item)
             }
             that.reFreshChart()
