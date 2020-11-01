@@ -16,7 +16,7 @@
     </div>
     <template v-if="isRefresh">
       <overview-chart
-          v-for="item in $store.state.OverviewGrade"
+          v-for="item in filtered_grades"
           :grade="item"
           :daterange="inputDate"
           :key="item"/>
@@ -28,7 +28,7 @@
 import OverviewChart from '@/components/charts/overview-chart'
 
 export default {
-  name: 'index-page',
+  name: 'freshman-page',
   components: {
     'overview-chart': OverviewChart
   },
@@ -89,8 +89,20 @@ export default {
       }
     }
   },
+  computed: {
+    filtered_grades() {
+      let arr1 = []
+      let arr2 = []
+      let cur = this.$store.state.user.username
+      for (let grade of this.$store.state.OverviewGrade) {
+        if (grade === cur) arr1.push(grade)
+        else arr2.push(grade)
+      }
+      return arr1.concat(arr2)
+    }
+  },
   created() {
-    document.title = "Home - viewOJ"
+    document.title = "Freshman - viewOJ"
     this.changeOverviewDate()
   },
   methods: {
@@ -98,7 +110,7 @@ export default {
       let data = {
         start_date: null,
         end_date: null,
-        is_freshman: false
+        is_freshman: true
       }
       if (this.inputDate !== null && this.inputDate.length === 2) {
         data.start_date = this.inputDate[0]

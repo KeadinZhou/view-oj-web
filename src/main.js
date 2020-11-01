@@ -24,6 +24,7 @@ new Vue({
     render: h => h(App),
     created() {
         store.commit('savePage', this)
+        store.commit('saveBackendVersion')
         this.$store.commit('updateUser')
     }
 }).$mount('#app')

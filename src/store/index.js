@@ -16,8 +16,10 @@ var state = {
         status: '',
         isUpdated: false
     },
+    backendVersion: "",
     OverviewData: [],
     OverviewGrade: [],
+    OverviewIsFreshman: false,
     OJlist: null, // Map
     UserallChartData: [],
     Userlist: null, // Map
@@ -29,6 +31,12 @@ var state = {
 var mutations = {
     savePage(state, page) {
         state.page = page
+    },
+    saveBackendVersion(state) {
+        state.page.$http.get(api + '/v2/meta/version')
+            .then(data => {
+                state.backendVersion = data.data.version
+            })
     },
     updateUser(state) {
         state.page.$http.get(api + '/v2/session')
@@ -80,11 +88,12 @@ var mutations = {
                 }
             })
     },
-    updateOverview(state, date) {
+    updateOverview(state, data) {
+        state.OverviewIsFreshman = data.is_freshman
         state.OverviewData = []
         state.OverviewGrade = new Set()
         var i
-        state.page.$http.get(api + '/v2/accept_problem/summary', {params: date || null})
+        state.page.$http.get(api + '/v2/accept_problem/summary', {params: data})
             .then(data => {
                 for (i in data.data.data) {
                     var item = data.data.data[i]
@@ -162,7 +171,7 @@ var mutations = {
             })
     },
     modifyUserInfo(state, data) {
-        state.page.$http.patch(api + '/v2/user/' + data.username, data)
+        state.page.$http.put(api + '/v2/user/' + data.username, data)
             .then(data => {
                 state.page.$message.success(data.data.msg)
             })
@@ -252,7 +261,7 @@ var mutations = {
             })
     },
     modifyUserNameBySelf(state, username) {
-        state.page.$http.patch(api + '/v2/user/' + state.user.userid, {
+        state.page.$http.put(api + '/v2/user/' + state.user.userid, {
             nickname: username
         })
             .then(data => {
