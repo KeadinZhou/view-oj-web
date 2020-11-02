@@ -193,6 +193,7 @@ var mutations = {
             })
     },
     modifyOJID(state, data) {
+        let chart = data.chart
         state.page.$http.post(api + '/v2/oj_username', {
             username: data.userid,
             oj_id: data.oj_id,
@@ -201,6 +202,7 @@ var mutations = {
         })
             .then(data => {
                 state.page.$message.success(data.data.msg)
+                chart.getData()
             })
             .catch(function (error) {
                 if (error.response) {
@@ -213,7 +215,7 @@ var mutations = {
             type: 'crawl_user_info',
             kwargs: JSON.stringify({
                 username: data.userid,
-                oj_id: data.ojid
+                oj_id: data.oj_id
             })
         })
             .then(data => {

@@ -10,7 +10,7 @@
           <el-input v-model="OJSetForm.username" autocomplete="off"/>
         </el-form-item>
         <el-form-item v-if="OJSetForm.need_password" label="password">
-          <el-input v-model="OJSetForm.password" show-password autocomplete="off"/>
+          <el-input v-model="OJSetForm.password" show-password autocomplete="new-password"/>
         </el-form-item>
       </el-form>
       <div slot="footer">
@@ -21,7 +21,7 @@
     <div class="tableTitle">
       <b>OJ-ID Setting</b>
     </div>
-    <el-card class="box-card" shadow="hover">
+    <el-card v-loading="isLoading" class="box-card" shadow="hover">
       <div v-if="isRefresh">
         <el-table :data="tableData" style="width: 100%">
           <el-table-column label="Userid" align="center">
@@ -74,6 +74,7 @@ export default {
   },
   data() {
     return {
+      isLoading: false,
       isRefresh: true,
       tableData: [],
       showDialog: false,
@@ -90,6 +91,7 @@ export default {
       this.OJSetForm.username = row.oj_username
       this.OJSetForm.need_password = row.oj.need_password
       this.OJSetForm.oj = row.oj
+      this.OJSetForm.password = ''
       this.showDialog = true
     },
     submitOJSet() {
@@ -101,14 +103,15 @@ export default {
         userid: this.userid,
         oj_id: this.OJSetForm.oj.id,
         username: this.OJSetForm.username,
-        password: this.OJSetForm.password
+        password: this.OJSetForm.password,
+        chart: this
       })
       this.showDialog = false
     },
     refreshOJ(row) {
       this.$store.commit('updateUserOJData', {
         userid: this.userid,
-        ojid: row.oj.id
+        oj_id: row.oj.id
       })
     },
     reFreshChart() {
@@ -120,13 +123,15 @@ export default {
     getData() {
       let that = this
       let api = this.$store.state.api
+      this.isLoading = true
       this.$http.get(api + '/v2/user/' + this.userid)
           .then(data => {
-            this.tableData = []
+            that.tableData = []
             for (let oj_username of data.data.data.oj_username) {
-              this.tableData.push(oj_username)
+              that.tableData.push(oj_username)
             }
-            this.reFreshChart()
+            that.reFreshChart()
+            that.isLoading = false
           })
           .catch(error => {
             if (error.response) {
