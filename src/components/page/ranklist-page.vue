@@ -122,12 +122,19 @@ export default {
       var that = this
       that.$http.get(api + '/v2/user/rating')
           .then(data => {
-            // that.tableData = data.data.data
             that.tableData = []
-            for (var item of data.data.data) {
-              if (item.is_freshman && !that.showFreshman) continue
-              if (item.status !== 1 && !that.showAll) continue
-              that.tableData.push(item)
+            for (let item of data.data.data) {
+              if(that.showAll){
+                if(!item.is_freshman) that.tableData.push(item)
+                else if(that.showFreshman) that.tableData.push(item)
+                continue
+              }
+              if (item.is_freshman) {
+                if (that.showFreshman) that.tableData.push(item)
+              } else {
+                if (that.showFreshman || item.status !== 1) continue
+                that.tableData.push(item)
+              }
             }
             that.reFreshChart()
           })
