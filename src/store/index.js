@@ -23,7 +23,6 @@ var state = {
     OJlist: null, // Map
     UserallChartData: [],
     Userlist: null, // Map
-    OJSetTableData: null,
     ACTableData: [],
     ACTableSize: 0
 }
@@ -193,33 +192,17 @@ var mutations = {
                 }
             })
     },
-    updateOJSetTableData(state, data) {
-        let chart = data.chart
-        state.page.$http.get(api + '/v2/user/' + data.username)
-            .then(data => {
-                state.OJSetTableData = []
-                for (var i in data.data.data.oj_username) {
-                    var item = data.data.data.oj_username[i]
-                    state.OJSetTableData.push(item)
-                }
-                chart.showData()
-                chart.reFreshChart()
-            })
-            .catch(function (error) {
-                if (error.response) {
-                    state.page.$message.error(error.response.data.msg)
-                }
-            })
-    },
     modifyOJID(state, data) {
+        let chart = data.chart
         state.page.$http.post(api + '/v2/oj_username', {
             username: data.userid,
-            oj_id: data.ojid,
-            oj_username: data.id,
-            oj_password: data.pwd
+            oj_id: data.oj_id,
+            oj_username: data.username,
+            oj_password: data.password
         })
             .then(data => {
                 state.page.$message.success(data.data.msg)
+                chart.getData()
             })
             .catch(function (error) {
                 if (error.response) {
@@ -232,7 +215,7 @@ var mutations = {
             type: 'crawl_user_info',
             kwargs: JSON.stringify({
                 username: data.userid,
-                oj_id: data.ojid
+                oj_id: data.oj_id
             })
         })
             .then(data => {
