@@ -104,8 +104,8 @@ export default {
         chart: this
       }
       if (this.inputDate !== null && this.inputDate.length === 2) {
-        data.start_date = this.inputDate[0]
-        data.end_date = this.inputDate[1]
+        data.data.start_date = this.inputDate[0]
+        data.data.end_date = this.inputDate[1]
       }
       this.$store.commit('updateOverview', data)
     },
