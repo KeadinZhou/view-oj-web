@@ -15,6 +15,7 @@
       </el-date-picker>
     </div>
     <template v-if="isRefresh">
+      <top-overview-chart/>
       <overview-chart
           v-for="item in filtered_grades"
           :grade="item"
@@ -26,10 +27,12 @@
 
 <script>
 import OverviewChart from '@/components/charts/overview-chart'
+import TopOverviewChart from "@/components/charts/top-overview-chart";
 
 export default {
   name: 'freshman-page',
   components: {
+    TopOverviewChart,
     'overview-chart': OverviewChart
   },
   data() {
@@ -108,15 +111,20 @@ export default {
   methods: {
     changeOverviewDate() {
       let data = {
-        start_date: null,
-        end_date: null,
-        is_freshman: true
+        data: {
+          start_date: null,
+          end_date: null,
+          is_freshman: true,
+        },
+        chart: this
       }
       if (this.inputDate !== null && this.inputDate.length === 2) {
         data.start_date = this.inputDate[0]
         data.end_date = this.inputDate[1]
       }
       this.$store.commit('updateOverview', data)
+    },
+    refreshChart() {
       this.isRefresh = false
       this.$nextTick(function () {
         this.isRefresh = true
