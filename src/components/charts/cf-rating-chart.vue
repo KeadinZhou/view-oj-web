@@ -141,7 +141,11 @@ export default {
           else deltastr = '+' + delta
           return row.Round +
               '<br />' +
-              'Rating: ' + params[0].data[1] + ' (' + deltastr + ')'
+              'Rank: ' + row.Rank +
+              '<br />' +
+              'Rating: ' + params[0].data[1] + ' (' + deltastr + ')' +
+              '<br />' +
+              'Time: ' + row.Date
         }
       }
     }
@@ -199,7 +203,8 @@ export default {
                 Date: item.create_time,
                 Rating: rating,
                 Delta: item.rating_change,
-                Round: item.round_name
+                Round: item.round_name,
+                Rank: item.rank
               })
             }
             that.reFreshChart()
