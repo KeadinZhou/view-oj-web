@@ -174,7 +174,6 @@ export default {
   },
   methods: {
     reFreshChart() {
-      console.log(this.chartData)
       this.isRefresh = false
       this.$nextTick(function () {
         this.isRefresh = true
