@@ -15,7 +15,7 @@
 
 <script>
 export default {
-  name: 'rating-chart',
+  name: 'cf-rating-chart',
   props: {
     userid: String
   },
@@ -38,7 +38,8 @@ export default {
     this.extend = {
       series: {
         symbol: 'circle',
-        showSymbol: false,
+        showSymbol: true,
+        symbolSize: 10,
         lineStyle: {
           width: 3,
           shadowColor: 'rgba(0, 0, 0, 1)',
@@ -54,58 +55,67 @@ export default {
                 color: '#cccccc'
               }
             }, {
+              yAxis: 1200
+            }
+          ], [
+            {
+              yAxis: 1200,
+              itemStyle: {
+                color: '#77e177'
+              }
+            }, {
+              yAxis: 1400
+            }
+          ], [
+            {
+              yAxis: 1400,
+              itemStyle: {
+                color: '#77ddbb'
+              }
+            }, {
               yAxis: 1600
             }
           ], [
             {
               yAxis: 1600,
               itemStyle: {
-                color: '#77e177'
-              }
-            }, {
-              yAxis: 1800
-            }
-          ], [
-            {
-              yAxis: 1800,
-              itemStyle: {
-                color: '#77ddbb'
-              }
-            }, {
-              yAxis: 2000
-            }
-          ], [
-            {
-              yAxis: 2000,
-              itemStyle: {
                 color: '#aaaaff'
               }
             }, {
-              yAxis: 2300
+              yAxis: 1900
             }
           ], [
             {
-              yAxis: 2300,
+              yAxis: 1900,
               itemStyle: {
                 color: '#ff88ff'
               }
             }, {
-              yAxis: 2500
+              yAxis: 2100
             }
           ], [
             {
-              yAxis: 2500,
+              yAxis: 2100,
               itemStyle: {
                 color: '#ffbb55'
               }
             }, {
-              yAxis: 2800
+              yAxis: 2400
             }
           ], [
             {
-              yAxis: 2800,
+              yAxis: 2400,
               itemStyle: {
                 color: '#ff7777'
+              }
+            }, {
+              yAxis: 2600
+            }
+          ], [
+            {
+              yAxis: 2600,
+              itemStyle: {
+                color: '#ff3333'
               }
             }, {
               yAxis: 3000
@@ -113,15 +123,6 @@ export default {
           ], [
             {
               yAxis: 3000,
-              itemStyle: {
-                color: '#ff3333'
-              }
-            }, {
-              yAxis: 3300
-            }
-          ], [
-            {
-              yAxis: 3300,
               itemStyle: {
                 color: '#aa0000'
               }
@@ -133,7 +134,14 @@ export default {
       },
       tooltip: {
         formatter: function (params) {
-          return params[0].data[0] + '<br />' + 'Rating: ' + params[0].data[1] + ' (+' + that.chartData.rows[params[0].dataIndex].Delta + ')'
+          let row = that.chartData.rows[params[0].dataIndex]
+          let delta = row.Delta
+          let deltastr = ''
+          if (delta < 0) deltastr = '-' + (-delta)
+          else deltastr = '+' + delta
+          return row.Round +
+              '<br />' +
+              'Rating: ' + params[0].data[1] + ' (' + deltastr + ')'
         }
       }
     }
@@ -147,7 +155,7 @@ export default {
       loading: false,
       isRefresh: true,
       chartTitle: {
-        text: 'Rating',
+        text: 'Codeforces Rating',
         left: 'center',
         right: 'center',
         textStyle: {
@@ -162,6 +170,7 @@ export default {
   },
   methods: {
     reFreshChart() {
+      console.log(this.chartData)
       this.isRefresh = false
       this.$nextTick(function () {
         this.isRefresh = true
@@ -175,21 +184,22 @@ export default {
       that.$http.get(api + '/v2/user/' + this.userid)
           .then(data => {
             this.chartData.rows = []
-            var rating = 1500
-            data.data.data.rating_trend.sort(function (a, b) {
+            var rating = 0
+            data.data.data.cf_rating_trend.sort(function (a, b) {
               if (a.date === b.date) {
                 return 0
               } else {
                 return a.date < b.date ? -1 : 0
               }
             })
-            for (var i in data.data.data.rating_trend) {
-              var item = data.data.data.rating_trend[i]
-              rating += item.add_rating
+            for (var i in data.data.data.cf_rating_trend) {
+              var item = data.data.data.cf_rating_trend[i]
+              rating += item.rating_change
               this.chartData.rows.push({
-                Date: item.date,
+                Date: item.create_time,
                 Rating: rating,
-                Delta: item.add_rating
+                Delta: item.rating_change,
+                Round: item.round_name
               })
             }
             that.reFreshChart()
