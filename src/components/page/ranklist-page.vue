@@ -43,7 +43,10 @@
           <el-table-column label="CF" align="center" width="80px" prop="codeforces" sortable
                            :sort-method="function(a,b) {return Number(a.codeforces_rating) - Number(b.codeforces_rating)}">
             <template slot-scope="scope">
-              <span>{{ Number(scope.row.codeforces_rating) }}</span>
+              <el-link :href="'#/user/'+scope.row.username+'?part=cf-rating'" :underline="false">{{
+                  Number(scope.row.codeforces_rating)
+                }}
+              </el-link>
             </template>
           </el-table-column>
           <el-table-column label="Cnt" align="center" width="80px" prop="contest" sortable
@@ -124,9 +127,9 @@ export default {
           .then(data => {
             that.tableData = []
             for (let item of data.data.data) {
-              if(that.showAll){
-                if(!item.is_freshman) that.tableData.push(item)
-                else if(that.showFreshman) that.tableData.push(item)
+              if (that.showAll) {
+                if (!item.is_freshman) that.tableData.push(item)
+                else if (that.showFreshman) that.tableData.push(item)
                 continue
               }
               if (item.is_freshman) {

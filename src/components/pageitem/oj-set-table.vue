@@ -36,7 +36,7 @@
             <template slot-scope="scope">
               {{ scope.row.oj_username }}
               <template
-                  v-if="(userid === $store.state.user.userid && !scope.row.oj_username) || $store.state.user.permission === 1">
+                  v-if="userid === $store.state.user.userid || $store.state.user.permission === 1">
                 <i style="cursor: pointer" class="el-icon-edit" @click="editOJID(scope.row)"></i>
               </template>
             </template>

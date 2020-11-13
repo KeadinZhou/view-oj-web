@@ -17,6 +17,8 @@ var state = {
         isUpdated: false
     },
     backendVersion: "",
+    TopLength: 25,
+    TopOverviewData: [],
     OverviewData: [],
     OverviewGrade: [],
     OverviewIsFreshman: false,
@@ -88,6 +90,8 @@ var mutations = {
             })
     },
     updateOverview(state, data) {
+        let chart = data.chart
+        data = data.data
         state.OverviewIsFreshman = data.is_freshman
         state.OverviewData = []
         state.OverviewGrade = new Set()
@@ -103,8 +107,14 @@ var mutations = {
                         group: item.user.group
                     })
                 }
+                state.TopOverviewData = []
+                let len = Math.min(state.TopLength, state.OverviewData.length)
+                for (i = 0; i < len; i++) {
+                    let tmp = state.OverviewData[i]
+                    state.TopOverviewData.push(tmp)
+                }
                 for (i = 0; i < state.OverviewData.length; i++) {
-                    var tmp = state.OverviewData[i].group
+                    let tmp = state.OverviewData[i].group
                     state.OverviewGrade.add(tmp)
                 }
                 state.OverviewGrade = Array.from(state.OverviewGrade)
@@ -112,6 +122,7 @@ var mutations = {
                     if (a < b) return 1
                     else return -1
                 })
+                if(chart) chart.refreshChart()
             })
             .catch(function (error) {
                 if (error.response) {

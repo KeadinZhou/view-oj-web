@@ -96,15 +96,20 @@ export default {
   methods: {
     changeOverviewDate() {
       let data = {
-        start_date: null,
-        end_date: null,
-        is_freshman: false
+        data: {
+          start_date: null,
+          end_date: null,
+          is_freshman: false
+        },
+        chart: this
       }
       if (this.inputDate !== null && this.inputDate.length === 2) {
-        data.start_date = this.inputDate[0]
-        data.end_date = this.inputDate[1]
+        data.data.start_date = this.inputDate[0]
+        data.data.end_date = this.inputDate[1]
       }
       this.$store.commit('updateOverview', data)
+    },
+    refreshChart() {
       this.isRefresh = false
       this.$nextTick(function () {
         this.isRefresh = true
