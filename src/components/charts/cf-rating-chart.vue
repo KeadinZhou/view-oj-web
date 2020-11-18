@@ -38,6 +38,7 @@ export default {
     this.extend = {
       series: {
         symbol: 'circle',
+        smooth: false,
         showSymbol: true,
         symbolSize: 10,
         lineStyle: {
