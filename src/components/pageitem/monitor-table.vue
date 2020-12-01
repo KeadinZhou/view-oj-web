@@ -80,13 +80,17 @@ export default {
     getDifficultyDescribe(difficulty) {
       switch (difficulty) {
         case 0:
-          return '未指定难度'
+          return 'unrated'
         case 1:
-          return '简单'
+          return 'normal'
         case 2:
-          return '一般'
+          return 'rare'
         case 3:
-          return '困难'
+          return 'epic'
+        case 4:
+          return 'legendary'
+        case 5:
+          return 'heroic'
         default:
           return 'ERROR'
       }
@@ -114,22 +118,31 @@ export default {
   width: 10px;
   height: 10px;
   border-radius: 50%;
+  background: black;
   margin-left: 5px;
 }
 
 .difficulty0 {
-  background: #aaaaaa;
+  background: black;
 }
 
 .difficulty1 {
-  background: pink;
+  background: #aaaaaa;
 }
 
-.difficulty2 {
-  background: purple;
+.difficulty2{
+  background: skyblue;
 }
 
 .difficulty3 {
+  background: purple;
+}
+
+.difficulty4 {
+  background: orange;
+}
+
+.difficulty5 {
   background: red;
 }
 </style>

@@ -17,7 +17,7 @@
             </el-select>
             <el-input v-model="item.pid" placeholder="Pro. Num" style="width: 150px"></el-input>
             <el-select v-model="item.difficulty" style="width: 120px">
-              <el-option v-for="i in Array(4).keys()" :key="i" :value="i" :label="getDifficultyDescribe(i)"/>
+              <el-option v-for="i in Array(6).keys()" :key="i" :value="i" :label="getDifficultyDescribe(i)"/>
             </el-select>
             <el-button type="danger" icon="el-icon-delete" size="mini" circle
                        @click="delItem(item)"></el-button>
@@ -290,13 +290,17 @@ export default {
     getDifficultyDescribe(difficulty) {
       switch (difficulty) {
         case 0:
-          return '未指定难度'
+          return 'unrated'
         case 1:
-          return '简单'
+          return 'normal'
         case 2:
-          return '一般'
+          return 'rare'
         case 3:
-          return '困难'
+          return 'epic'
+        case 4:
+          return 'legendary'
+        case 5:
+          return 'heroic'
         default:
           return 'ERROR'
       }
