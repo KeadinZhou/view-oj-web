@@ -87,4 +87,8 @@ export default {
 .el-scrollbar__wrap {
   overflow: auto;
 }
+
+.el-select-dropdown .el-scrollbar .el-scrollbar__wrap {
+  overflow: scroll;
+}
 </style>
