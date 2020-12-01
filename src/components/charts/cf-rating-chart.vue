@@ -1,15 +1,21 @@
 <template>
   <div>
+    <p class="chartTitle">Codeforces Rating</p>
+    <div class="tips-box">
+      上周场数：<b>{{ statistics.count }}</b>
+      <el-divider direction="vertical"></el-divider>
+      分数变动：<b>{{ statistics.rating_change }}</b>
+      <el-divider direction="vertical"></el-divider>
+      最终分数：<b>{{ statistics.last_rating }}</b>
+    </div>
     <ve-line
         :data="chartData"
         :extend="extend"
         :settings="chartSettings"
-        :title="chartTitle"
         :mark-point="markPoint"
         :legend-visible="false"
         height="600px"
-        v-loading="loading">
-    </ve-line>
+        v-loading="loading"/>
   </div>
 </template>
 
@@ -159,18 +165,11 @@ export default {
     return {
       loading: false,
       isRefresh: true,
-      chartTitle: {
-        text: 'Codeforces Rating',
-        left: 'center',
-        right: 'center',
-        textStyle: {
-          fontSize: 25
-        }
-      },
       chartData: {
         columns: ['Date', 'Rating'],
         rows: []
-      }
+      },
+      statistics: {}
     }
   },
   methods: {
@@ -187,6 +186,10 @@ export default {
       var that = this
       that.$http.get(api + '/v2/user/' + this.userid)
           .then(data => {
+            this.statistics = data.data.data.cf_statistics
+            if (this.statistics.rating_change > 0) {
+              this.statistics.rating_change = '+' + this.statistics.rating_change
+            }
             this.chartData.rows = []
             var rating = 0
             data.data.data.cf_rating_trend.sort(function (a, b) {
@@ -228,4 +231,19 @@ export default {
 </script>
 
 <style scoped>
+.chartTitle {
+  text-align: center;
+  font-size: 25px;
+  font-weight: bold;
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
+.tips-box {
+  width: 100%;
+  text-align: center;
+  color: #555555;
+  font-size: 14px;
+  margin-bottom: -30px;
+}
 </style>
