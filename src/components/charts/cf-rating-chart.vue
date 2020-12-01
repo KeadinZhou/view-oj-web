@@ -86,7 +86,7 @@ export default {
             {
               yAxis: 1600,
               itemStyle: {
-                color: '#aaaaff'
+                color: '#5d5dfa'
               }
             }, {
               yAxis: 1900
