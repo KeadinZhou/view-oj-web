@@ -290,17 +290,17 @@ export default {
     getDifficultyDescribe(difficulty) {
       switch (difficulty) {
         case 0:
-          return 'unrated'
+          return '未评级'
         case 1:
-          return 'normal'
+          return '普通'
         case 2:
-          return 'rare'
+          return '稀有'
         case 3:
-          return 'epic'
+          return '史诗'
         case 4:
-          return 'legendary'
+          return '传说'
         case 5:
-          return 'heroic'
+          return '神话'
         default:
           return 'ERROR'
       }
