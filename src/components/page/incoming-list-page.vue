@@ -100,7 +100,7 @@ export default {
       return true
     },
     submitEdit() {
-      if (!this.dialogData.timerange) {
+      if (!this.dialogData.time_range) {
         this.$message.error('Please input competition time')
         return
       }
@@ -140,14 +140,14 @@ export default {
     },
     initDialog() {
       this.isDialogShow = false
-      this.dialogData = this.initDialogData
+      this.dialogData = Object.assign({}, this.initDialogData)
     },
     openDialog(id) {
       this.initDialog()
       if (id !== -1) {
         for (let row of this.tableData) {
           if (row.id === id) {
-            this.dialogData = row
+            this.dialogData = Object.assign({}, row)
             this.$set(this.dialogData, 'time_range', [row.start_time, row.end_time])
             break
           }
