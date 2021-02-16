@@ -30,7 +30,7 @@
             <template slot-scope="scope">
               <el-button size="mini" type="warning" plain @click="$message.error('施工中')">编辑</el-button>
               <el-button size="mini" type="danger" plain
-                         @click="$message.error('施工中')">删除{{ scope && null }}
+                         @click="deleteCompetition(scope.row.id)">删除
               </el-button>
             </template>
           </el-table-column>
@@ -69,6 +69,22 @@ export default {
         that.tableData = resp.data.data.data
         that.page = resp.data.data.meta.page
         that.total = resp.data.data.meta.count
+      })
+    },
+    deleteCompetition(id) {
+      this.$confirm('确定要删除吗', '请确认', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$http.delete(this.$store.state.api + '/v2/competition/' + id)
+            .then(resp => {
+              this.$message.success(resp.data.msg)
+              this.getData(this.page)
+            })
+            .catch(error => {
+              this.$message.error(error.response.data.msg)
+            })
       })
     }
   },
