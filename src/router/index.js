@@ -20,6 +20,13 @@ export default new Router({
                 title: 'Freshman - viewOJ'
             }
         }, {
+            path: '/incoming-list',
+            name: 'incoming-list-page',
+            component: () => import('@/components/page/incoming-list-page'),
+            meta: {
+                title: 'IncomingList - viewOJ'
+            }
+        }, {
             path: '/admin',
             name: 'admin-page',
             component: () => import('@/components/page/admin-page'),
