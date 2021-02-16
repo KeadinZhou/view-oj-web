@@ -12,7 +12,14 @@
       <el-table :data="tableData" stripe border>
         <el-table-column prop="name" label="比赛名称" fixed="left">
           <template slot-scope="scope">
-            <el-link :href="scope.row.link" target="_blank" :underline="false">{{ scope.row.name }}</el-link>
+            <template v-if="scope.row.link">
+              <el-link :href="scope.row.link" target="_blank" :underline="false">{{ scope.row.name }}</el-link>
+            </template>
+            <template v-else>
+              <el-tooltip content="暂无链接" placement="top">
+                <p> {{ scope.row.name }} </p>
+              </el-tooltip>
+            </template>
           </template>
         </el-table-column>
         <el-table-column prop="start_time" label="开始时间"/>
