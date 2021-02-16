@@ -29,6 +29,12 @@
           </el-table-column>
         </template>
       </el-table>
+      <div class="pagination">
+        <el-pagination
+            layout="prev, pager, next, total"
+            :current-page="page" :total="total" :page-size="page_size"
+            @current-change="getData"/>
+      </div>
     </el-card>
   </div>
 </template>
@@ -38,20 +44,29 @@ export default {
   name: "incoming-list-page",
   data() {
     return {
-      tableData: []
+      tableData: [],
+      page: 1,
+      total: 1,
+      page_size: 20
     }
   },
   methods: {
-    getData() {
+    getData(pageid) {
       let that = this
-      this.$http.get(this.$store.state.api + '/v2/competition/')
-          .then(resp => {
-            that.tableData = resp.data.data.data
-          })
+      this.$http.get(this.$store.state.api + '/v2/competition/', {
+        params: {
+          page: pageid,
+          page_size: that.page_size
+        }
+      }).then(resp => {
+        that.tableData = resp.data.data.data
+        that.page = resp.data.data.meta.page
+        that.total = resp.data.data.meta.count
+      })
     }
   },
   created() {
-    this.getData()
+    this.getData(1)
   }
 }
 </script>
@@ -73,4 +88,12 @@ export default {
   margin-bottom: 30px;
 }
 
+.pagination {
+  position: relative;
+  width: 50%;
+  left: 50%;
+  margin-top: 20px;
+  transform: translate(-50%, 0);
+  text-align: center;
+}
 </style>
