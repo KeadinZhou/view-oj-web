@@ -100,6 +100,10 @@ export default {
       return true
     },
     submitEdit() {
+      if (!this.dialogData.timerange) {
+        this.$message.error('Please input competition time')
+        return
+      }
       let data = {
         name: this.dialogData.name,
         link: this.dialogData.link,
@@ -144,7 +148,7 @@ export default {
         for (let row of this.tableData) {
           if (row.id === id) {
             this.dialogData = row
-            this.dialogData.time_range = [row.start_time, row.end_time]
+            this.$set(this.dialogData, 'time_range', [row.start_time, row.end_time])
             break
           }
         }
