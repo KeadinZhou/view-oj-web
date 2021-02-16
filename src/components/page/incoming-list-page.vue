@@ -1,11 +1,33 @@
 <template>
   <div>
+    <el-dialog title="Edit Competition" :visible.sync="isDialogShow" append-to-body width="600px">
+      <el-form label-position="left" :model="dialogData" label-width="100px">
+        <el-form-item label="比赛名称">
+          <el-input v-model="dialogData.name"/>
+        </el-form-item>
+        <el-form-item label="比赛链接">
+          <el-input v-model="dialogData.link"/>
+        </el-form-item>
+        <el-form-item label="比赛时间">
+          <el-date-picker
+              style="width: 100%"
+              type="datetimerange" v-model="dialogData.time_range"
+              start-placeholder="开始时间" end-placeholder="结束时间"
+              value-format="yyyy-MM-dd HH:mm:ss"
+          />
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="initDialog">Cancel</el-button>
+        <el-button type="primary" @click="submitEdit">Submit</el-button>
+      </div>
+    </el-dialog>
     <el-card shadow="hover" style="padding: 10px; border-radius: 30px">
       <div class="tableTitle">
         <b>Incoming Competitions</b>
       </div>
       <div v-if="$store.state.user.permission === 1" class="centerBox">
-        <el-button class="el-icon-plus" type="primary" round plain @click="$message.error('施工中')">
+        <el-button class="el-icon-plus" type="primary" round plain @click="openDialog(-1)">
           添加新比赛
         </el-button>
       </div>
@@ -28,7 +50,9 @@
         <template v-if="$store.state.user.permission === 1">
           <el-table-column label="操作" fixed="right" width="150px">
             <template slot-scope="scope">
-              <el-button size="mini" type="warning" plain @click="$message.error('施工中')">编辑</el-button>
+              <el-button size="mini" type="warning" plain @click="openDialog(scope.row.id)">
+                编辑
+              </el-button>
               <el-button size="mini" type="danger" plain
                          @click="deleteCompetition(scope.row.id)">删除
               </el-button>
@@ -51,6 +75,15 @@ export default {
   name: "incoming-list-page",
   data() {
     return {
+      isDialogShow: false,
+      dialogData: {},
+      initDialogData: {
+        id: -1,
+        name: '',
+        link: '',
+        time_range: [],
+        remark: ''
+      },
       tableData: [],
       page: 1,
       total: 1,
@@ -58,6 +91,63 @@ export default {
     }
   },
   methods: {
+    checkData(data) {
+      if (data.name === '') return "Please input competition name"
+      if (data.start_time === '' || data.start_time === undefined) return 'Please input competition time'
+      return true
+    },
+    submitEdit() {
+      let data = {
+        name: this.dialogData.name,
+        link: this.dialogData.link,
+        start_time: this.dialogData.time_range[0],
+        end_time: this.dialogData.time_range[1],
+        remark: this.dialogData.remark
+      }
+      let res = this.checkData(data)
+      if (typeof res === "string") {
+        this.$message.error(res)
+        return
+      }
+      if (this.dialogData.id === -1) {
+        this.$http.post(this.$store.state.api + '/v2/competition/', data)
+            .then(resp => {
+              this.$message.success(resp.data.msg)
+              this.initDialog()
+              this.getData(this.page)
+            })
+            .catch(error => {
+              this.$message.error(error.response.data.msg)
+            })
+      } else {
+        this.$http.put(this.$store.state.api + '/v2/competition/' + this.dialogData.id, data)
+            .then(resp => {
+              this.$message.success(resp.data.msg)
+              this.initDialog()
+              this.getData(this.page)
+            })
+            .catch(error => {
+              this.$message.error(error.response.data.msg)
+            })
+      }
+    },
+    initDialog() {
+      this.isDialogShow = false
+      this.dialogData = this.initDialogData
+    },
+    openDialog(id) {
+      this.initDialog()
+      if (id !== -1) {
+        for (let row of this.tableData) {
+          if (row.id === id) {
+            this.dialogData = row
+            this.dialogData.time_range = [row.start_time, row.end_time]
+            break
+          }
+        }
+      }
+      this.isDialogShow = true
+    },
     getData(pageid) {
       let that = this
       this.$http.get(this.$store.state.api + '/v2/competition/', {
