@@ -16,6 +16,9 @@
               value-format="yyyy-MM-dd HH:mm:ss"
           />
         </el-form-item>
+        <el-form-item label="备注">
+          <el-input v-model="dialogData.remark" type="textarea"/>
+        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="initDialog">Cancel</el-button>
