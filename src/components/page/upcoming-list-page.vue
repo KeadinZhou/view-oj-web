@@ -27,7 +27,7 @@
     </el-dialog>
     <el-card shadow="hover" style="padding: 10px; border-radius: 30px">
       <div class="tableTitle">
-        <b>Incoming Competitions</b>
+        <b>Upcoming Competitions</b>
       </div>
       <div v-if="$store.state.user.permission === 1" class="centerBox">
         <el-button class="el-icon-plus" type="primary" round plain @click="openDialog(-1)">
@@ -75,7 +75,7 @@
 
 <script>
 export default {
-  name: "incoming-list-page",
+  name: "upcoming-list-page",
   data() {
     return {
       isDialogShow: false,

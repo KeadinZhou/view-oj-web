@@ -7,7 +7,7 @@
         <el-menu-item index="/" route="/">Member</el-menu-item>
         <el-menu-item index="/freshman" route="/freshman">Freshman</el-menu-item>
       </el-submenu>
-      <el-menu-item index="/incoming-list" route="/incoming-list">Incoming</el-menu-item>
+      <el-menu-item index="/upcoming-list" route="/upcoming-list">Upcoming</el-menu-item>
       <el-menu-item index="/ranklist" route="/ranklist">Ranklist</el-menu-item>
       <el-menu-item index="/camp" route="/camp">Camp</el-menu-item>
       <el-menu-item index="/monitor" route="/monitor">Monitor</el-menu-item>
