@@ -18,14 +18,17 @@
           </template>
         </el-table-column>
         <template v-for="(problem, index) in  proList">
-          <el-table-column align="center" :key="index" min-width="35">
+          <el-table-column align="center" :key="index" min-width="50">
             <template slot="header">
-              <el-tooltip class="item" effect="dark" :content="problem.oj.name+'-'+problem.problem_pid"
-                          placement="top">
-                <el-link :href="problem.url" target="_blank" :underline="false" style="color: gray">
-                  <b>{{ String.fromCharCode((65 + index)) }}</b>
-                </el-link>
-              </el-tooltip>
+              <el-link :href="problem.url" target="_blank" :underline="false" style="color: gray">
+                <el-tooltip effect="dark" :content="problem.oj.name+'-'+problem.problem_pid"
+                            placement="top">
+                  <span style="font-weight: bold">{{ String.fromCharCode((65 + index)) }}</span>
+                </el-tooltip>
+                <el-tooltip :content="getDifficultyDescribe(problem.difficulty)" placement="top">
+                  <div class="dot" :class="'difficulty'+problem.difficulty"/>
+                </el-tooltip>
+              </el-link>
             </template>
             <template slot-scope="scope">
               <el-tooltip class="item" effect="dark" :content="problem.oj.name+'-'+problem.problem_pid"
@@ -73,6 +76,24 @@ export default {
           count: proset.size
         })
       }
+    },
+    getDifficultyDescribe(difficulty) {
+      switch (difficulty) {
+        case 0:
+          return '未评级'
+        case 1:
+          return '普通'
+        case 2:
+          return '稀有'
+        case 3:
+          return '史诗'
+        case 4:
+          return '传说'
+        case 5:
+          return '神话'
+        default:
+          return 'ERROR'
+      }
     }
   },
   created() {
@@ -90,5 +111,38 @@ export default {
   position: relative;
   left: 50%;
   transform: translate(-50%, 0);
+}
+
+.dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: black;
+  margin-left: 5px;
+}
+
+.difficulty0 {
+  background: black;
+}
+
+.difficulty1 {
+  background: #aaaaaa;
+}
+
+.difficulty2{
+  background: skyblue;
+}
+
+.difficulty3 {
+  background: purple;
+}
+
+.difficulty4 {
+  background: orange;
+}
+
+.difficulty5 {
+  background: red;
 }
 </style>

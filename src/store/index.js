@@ -122,7 +122,7 @@ var mutations = {
                     if (a < b) return 1
                     else return -1
                 })
-                if(chart) chart.refreshChart()
+                if (chart) chart.refreshChart()
             })
             .catch(function (error) {
                 if (error.response) {

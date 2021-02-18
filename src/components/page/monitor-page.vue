@@ -12,10 +12,13 @@
         <template v-for="(item,index) in problemSet">
           <div :key="index" class="itemItem">
             <b style="margin-right: 10px">{{ String.fromCharCode((65 + index)) }}</b>
-            <el-select v-model="item.oj" placeholder="OJ" style="width: 200px">
+            <el-select v-model="item.oj" placeholder="OJ" style="width: 150px">
               <el-option v-for="OJ in ojList" :key="OJ.id" :label="OJ.name" :value="OJ.name"></el-option>
             </el-select>
-            <el-input v-model="item.pid" placeholder="Pro. Num" style="width: 200px"></el-input>
+            <el-input v-model="item.pid" placeholder="Pro. Num" style="width: 150px"></el-input>
+            <el-select v-model="item.difficulty" style="width: 120px">
+              <el-option v-for="i in Array(6).keys()" :key="i" :value="i" :label="getDifficultyDescribe(i)"/>
+            </el-select>
             <el-button type="danger" icon="el-icon-delete" size="mini" circle
                        @click="delItem(item)"></el-button>
           </div>
@@ -197,11 +200,18 @@ export default {
         this.problemSet.push({
           oj: null,
           pid: '',
+          difficulty: 0
         })
       } else {
+        let oldpid = this.problemSet[num - 1].pid
+        let newpid
+        if (oldpid === '') newpid = ''
+        else if (isNaN(oldpid)) newpid = oldpid.substr(0, oldpid.length - 1) + String.fromCharCode(oldpid.charCodeAt(oldpid.length - 1) + 1)
+        else newpid = (parseInt(oldpid) + 1).toString()
         this.problemSet.push({
           oj: this.problemSet[num - 1].oj,
-          pid: (Number(this.problemSet[num - 1].pid) + 1) + '',
+          pid: newpid,
+          difficulty: 0
         })
       }
     },
@@ -227,9 +237,12 @@ export default {
         that.$message.error('ProblemSet cannot be empty!')
         return
       }
-      let problems = new Set()
+      let problems = []
       for (let prob of that.problemSet) {
-        problems.add(prob.oj + '-' + prob.pid)
+        problems.push({
+          problem: prob.oj + '-' + prob.pid,
+          difficulty: prob.difficulty
+        })
       }
       that.$http.post(this.api + '/v2/problem_set', {
         name: that.newSetTitle,
@@ -273,6 +286,24 @@ export default {
               that.$message.error(error.response.data.msg)
             }
           })
+    },
+    getDifficultyDescribe(difficulty) {
+      switch (difficulty) {
+        case 0:
+          return '未评级'
+        case 1:
+          return '普通'
+        case 2:
+          return '稀有'
+        case 3:
+          return '史诗'
+        case 4:
+          return '传说'
+        case 5:
+          return '神话'
+        default:
+          return 'ERROR'
+      }
     }
   },
   created() {
