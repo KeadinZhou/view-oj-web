@@ -9,8 +9,7 @@
       <el-link type="primary" href="https://github.com/KeadinZhou/view-oj-web">Keadin</el-link>
       &
       <el-link type="primary" href="https://github.com/Jiubei0408">Jiubei</el-link>
-      <span class="build-version">Frontend Build at {{ buildVersion }}</span>
-      <span class="build-version">Backend Build at {{ $store.state.backendVersion }}</span>
+      <span class="build-version">Build at {{ buildVersion }} [Web] & {{ $store.state.backendVersion }} [Server]</span>
     </p>
   </div>
 </template>
