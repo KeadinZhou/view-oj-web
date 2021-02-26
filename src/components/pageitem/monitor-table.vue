@@ -139,7 +139,7 @@ export default {
 }
 
 .reviewColor {
-  color: #FAC402;
+  color: #ffb974;
 }
 
 .tableBox {
