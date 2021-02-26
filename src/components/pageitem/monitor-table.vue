@@ -1,6 +1,10 @@
 <template>
   <div>
     <el-card class="tableBox" shadow="never">
+      <div style="float: right">
+        <div class="el-icon-success doneColor"/> 赛中过题
+        <div style="margin-left: 10px" class="el-icon-success reviewColor"/> 赛后补题
+      </div>
       <el-table :data="tableData" :default-sort="{prop: 'count', order: 'descending'}">
         <el-table-column label="Userid" align="center" width="90" prop="userid" sortable>
           <template slot-scope="scope">
