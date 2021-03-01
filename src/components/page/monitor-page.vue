@@ -4,6 +4,22 @@
       <div>
         <el-input placeholder="The Title of The New Problem Set" v-model="newSetTitle"
                   prefix-icon="el-icon-edit-outline"></el-input>
+
+      </div>
+      <div style="display: flex; justify-content: space-between; margin: 20px 0">
+        <el-date-picker
+            style="width: 45%"
+            type="datetime" v-model="startTime"
+            placeholder="开始时间（可不填）"
+            value-format="yyyy-MM-dd HH:mm:ss"
+        />
+        <p style="line-height: 40px; font-size: 20px">-</p>
+        <el-date-picker
+            style="width: 45%"
+            type="datetime" v-model="endTime"
+            placeholder="结束时间（可不填）"
+            value-format="yyyy-MM-dd HH:mm:ss"
+        />
       </div>
       <div class="itemBox">
         <div class="itemItem">
@@ -99,7 +115,8 @@
                   <i class="el-icon-loading"></i> Loading...
                 </template>
                 <template v-else>
-                  <monitor-table :proData="proData" :proList="proList"></monitor-table>
+                  <monitor-table :proData="proData" :proList="proList"
+                                 :pro-start="proStart" :pro-end="proEnd"/>
                 </template>
               </template>
             </div>
@@ -121,11 +138,15 @@ export default {
       SetList: [],
       activeNames: -1,
       isLoading: true,
+      proStart: null,
+      proEnd: null,
       proData: [],
       proList: [],
       ojList: [],
       addBoxShow: false,
       newSetTitle: '',
+      startTime: undefined,
+      endTime: undefined,
       problemSet: [],
       isAdminMode: false,
     }
@@ -153,6 +174,8 @@ export default {
           .then(data => {
             this.proData = data.data.data.detail
             this.proList = data.data.data.problem_list
+            this.proStart = data.data.data.start_time
+            this.proEnd = data.data.data.end_time
             this.isLoading = false
           })
           .catch(function (error) {
@@ -192,6 +215,7 @@ export default {
     initProblemSet() {
       this.newSetTitle = ''
       this.problemSet = []
+      this.startTime = this.endTime = undefined
       this.addBoxShow = false
     },
     addProblem() {
@@ -246,7 +270,9 @@ export default {
       }
       that.$http.post(this.api + '/v2/problem_set', {
         name: that.newSetTitle,
-        problem_list: JSON.stringify(Array.from(problems))
+        problem_list: JSON.stringify(Array.from(problems)),
+        start_time: this.startTime,
+        end_time: this.endTime
       })
           .then(data => {
             that.$message.success(data.data.msg)

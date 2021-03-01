@@ -9,6 +9,10 @@ import store from './store'
 import VCharts from 'v-charts'
 import axios from 'axios'
 import App from './App'
+import moment from 'moment';
+
+moment.locale('zh-cn');
+Vue.prototype.$moment = moment;
 
 Vue.config.productionTip = false
 Vue.use(ElementUI)

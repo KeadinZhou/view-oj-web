@@ -1,6 +1,10 @@
 <template>
   <div>
     <el-card class="tableBox" shadow="never">
+      <div style="float: right">
+        <div class="el-icon-success doneColor"/> 赛中过题
+        <div style="margin-left: 10px" class="el-icon-success reviewColor"/> 赛后补题
+      </div>
       <el-table :data="tableData" :default-sort="{prop: 'count', order: 'descending'}">
         <el-table-column label="Userid" align="center" width="90" prop="userid" sortable>
           <template slot-scope="scope">
@@ -33,7 +37,7 @@
             <template slot-scope="scope">
               <el-tooltip class="item" effect="dark" :content="problem.oj.name+'-'+problem.problem_pid"
                           placement="top">
-                <i :class="scope.row.state[index]?'el-icon-success doneColor':'el-icon-minus'"></i>
+                <i :class="State2ClassName(scope.row.state[index])"></i>
               </el-tooltip>
             </template>
           </el-table-column>
@@ -48,7 +52,9 @@ export default {
   name: 'monitor-table',
   props: {
     proData: Array,
-    proList: Array
+    proList: Array,
+    proStart: String,
+    proEnd: String
   },
   data() {
     return {
@@ -56,27 +62,52 @@ export default {
     }
   },
   methods: {
+    State2ClassName(state) {
+      switch (state) {
+        case 2:
+          return 'el-icon-success doneColor'
+        case 1:
+          return 'el-icon-success reviewColor'
+        default:
+          return 'el-icon-minus'
+      }
+    },
     initData() {
       this.tableData = []
       for (let data of this.proData.filter((a) => {
         return !a.user.is_freshman
       })) {
-        let proset = new Set()
+        let acset = new Set()
+        let strictset = new Set()
         for (let ac_problem of data.data) {
-          proset.add(ac_problem.problem.problem_pid)
+          acset.add(ac_problem.problem.problem_pid)
+          if (this.proStart && this.$moment(ac_problem.create_time).isBefore(this.$moment(this.proStart))) {
+            continue
+          }
+          if (this.proEnd && this.$moment(ac_problem.create_time).isAfter(this.$moment(this.proEnd))) {
+            continue
+          }
+          strictset.add(ac_problem.problem.problem_pid)
         }
         let state = []
         for (let problem of this.proList) {
-          state.push(proset.has(problem.problem_pid))
+          if (strictset.has(problem.problem_pid)) {
+            state.push(2)
+          } else if (acset.has(problem.problem_pid)) {
+            state.push(1)
+          } else {
+            state.push(0)
+          }
         }
         this.tableData.push({
           userid: data.user.username,
           username: data.user.nickname,
           state: state,
-          count: proset.size
+          count: acset.size
         })
       }
-    },
+    }
+    ,
     getDifficultyDescribe(difficulty) {
       switch (difficulty) {
         case 0:
@@ -107,6 +138,10 @@ export default {
   color: #67C23A;
 }
 
+.reviewColor {
+  color: #ffb974;
+}
+
 .tableBox {
   position: relative;
   left: 50%;
@@ -130,7 +165,7 @@ export default {
   background: #aaaaaa;
 }
 
-.difficulty2{
+.difficulty2 {
   background: skyblue;
 }
 
