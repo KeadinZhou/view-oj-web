@@ -49,6 +49,22 @@
       <div class="tableTitle">
         <b>The Monitor of The Problem Set</b>
       </div>
+      <div class="centerBox">
+        <el-input placeholder="Search Problem Set" v-model="searchStr" style="width: 500px" @keydown.enter.native="listFilter">
+          <el-button slot="append" icon="el-icon-search" @click="listFilter"/>
+        </el-input>
+      </div>
+      <div class="centerBox">
+        <div style="width: 500px">
+          Or click tag:
+          <template v-for="i in simplified">
+            <el-tag :key="i.sim" style="font-size: 14px; cursor: pointer; margin: 5px"
+                    @click="fillSearch(i.text)">
+              {{ i.sim }}
+            </el-tag>
+          </template>
+        </div>
+      </div>
       <div class="centerBox" v-if="this.$store.state.user.permission === 1">
         <el-button-group>
           <el-tooltip effect="dark" content="Add New Problem Set" placement="top">
@@ -72,7 +88,7 @@
         </el-button-group>
       </div>
       <el-collapse accordion @change="openItem">
-        <template v-for="item in SetList">
+        <template v-for="item in filteredList">
           <el-collapse-item :name="item.id" :key="item.id">
             <template slot="title">
               <i class="el-icon-collection-tag" style="margin-left: 10px;color: #409EFF"></i>
@@ -136,6 +152,7 @@ export default {
     return {
       api: this.$store.state.api,
       SetList: [],
+      filteredList: [],
       activeNames: -1,
       isLoading: true,
       proStart: null,
@@ -149,18 +166,45 @@ export default {
       endTime: undefined,
       problemSet: [],
       isAdminMode: false,
+      searchStr: '',
+      simplified: [{
+        sim: '全部',
+        text: ''
+      }, {
+        sim: 'CF',
+        text: 'Codeforces'
+      }, {
+        sim: 'div. 2',
+        text: 'div. 2'
+      }, {
+        sim: '牛客',
+        text: '牛客'
+      }, {
+        sim: '周赛',
+        text: '周赛'
+      }]
     }
   },
   components: {
     'monitor-table': MonitorTable
   },
   methods: {
+    fillSearch(str){
+      this.searchStr = str
+      this.listFilter()
+    },
+    listFilter() {
+      this.filteredList = this.SetList.filter(value => {
+        return value.name.toLowerCase().indexOf(this.searchStr.toLowerCase()) >= 0
+      })
+    },
     getList() {
       this.SetList = []
       var that = this
       that.$http.get(this.api + '/v2/problem_set/summary')
           .then(data => {
             this.SetList = data.data.data
+            this.listFilter()
           })
           .catch(function (error) {
             if (error.response) {
