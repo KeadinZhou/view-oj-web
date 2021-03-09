@@ -1,56 +1,13 @@
 <template>
   <div>
-    <el-dialog title="Add Problem Set" :visible.sync="addBoxShow" :append-to-body="true" width="600px">
-      <div>
-        <el-input placeholder="The Title of The New Problem Set" v-model="newSetTitle"
-                  prefix-icon="el-icon-edit-outline"></el-input>
-
-      </div>
-      <div style="display: flex; justify-content: space-between; margin: 20px 0">
-        <el-date-picker
-            style="width: 45%"
-            type="datetime" v-model="startTime"
-            placeholder="开始时间（可不填）"
-            value-format="yyyy-MM-dd HH:mm:ss"
-        />
-        <p style="line-height: 40px; font-size: 20px">-</p>
-        <el-date-picker
-            style="width: 45%"
-            type="datetime" v-model="endTime"
-            placeholder="结束时间（可不填）"
-            value-format="yyyy-MM-dd HH:mm:ss"
-        />
-      </div>
-      <div class="itemBox">
-        <div class="itemItem">
-          <el-button icon="el-icon-plus" round @click="addProblem">New</el-button>
-        </div>
-        <template v-for="(item,index) in problemSet">
-          <div :key="index" class="itemItem">
-            <b style="margin-right: 10px">{{ String.fromCharCode((65 + index)) }}</b>
-            <el-select v-model="item.oj" placeholder="OJ" style="width: 150px">
-              <el-option v-for="OJ in ojList" :key="OJ.id" :label="OJ.name" :value="OJ.name"></el-option>
-            </el-select>
-            <el-input v-model="item.pid" placeholder="Pro. Num" style="width: 150px"></el-input>
-            <el-select v-model="item.difficulty" style="width: 120px">
-              <el-option v-for="i in Array(6).keys()" :key="i" :value="i" :label="getDifficultyDescribe(i)"/>
-            </el-select>
-            <el-button type="danger" icon="el-icon-delete" size="mini" circle
-                       @click="delItem(item)"></el-button>
-          </div>
-        </template>
-      </div>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="initProblemSet">Cancel</el-button>
-        <el-button type="primary" @click="submitCreate">Submit</el-button>
-      </div>
-    </el-dialog>
+    <monitor-edit-dialog :visible.sync="addBoxShow" :oj_list="ojList" :user_list="userList"/>
     <el-card shadow="hover" class="tableBox">
       <div class="tableTitle">
         <b>The Monitor of The Problem Set</b>
       </div>
       <div class="centerBox">
-        <el-input placeholder="Search Problem Set" v-model="searchStr" style="width: 500px" @keydown.enter.native="listFilter">
+        <el-input placeholder="Search Problem Set" v-model="searchStr" style="width: 500px"
+                  @keydown.enter.native="listFilter">
           <el-button slot="append" icon="el-icon-search" @click="listFilter"/>
         </el-input>
       </div>
@@ -145,9 +102,15 @@
 
 <script>
 import MonitorTable from '@/components/pageitem/monitor-table'
+import MonitorEditDialog from "@/components/pageitem/edit-monitor-dialog";
 
 export default {
   name: 'monitor-page',
+  provide() {
+    return {
+      refresh: this.getList
+    }
+  },
   data() {
     return {
       api: this.$store.state.api,
@@ -160,11 +123,8 @@ export default {
       proData: [],
       proList: [],
       ojList: [],
+      userList: [],
       addBoxShow: false,
-      newSetTitle: '',
-      startTime: undefined,
-      endTime: undefined,
-      problemSet: [],
       isAdminMode: false,
       searchStr: '',
       simplified: [{
@@ -186,10 +146,11 @@ export default {
     }
   },
   components: {
+    MonitorEditDialog,
     'monitor-table': MonitorTable
   },
   methods: {
-    fillSearch(str){
+    fillSearch(str) {
       this.searchStr = str
       this.listFilter()
     },
@@ -256,79 +217,6 @@ export default {
             }
           })
     },
-    initProblemSet() {
-      this.newSetTitle = ''
-      this.problemSet = []
-      this.startTime = this.endTime = undefined
-      this.addBoxShow = false
-    },
-    addProblem() {
-      var num = this.problemSet.length
-      if (num === 0) {
-        this.problemSet.push({
-          oj: null,
-          pid: '',
-          difficulty: 0
-        })
-      } else {
-        let oldpid = this.problemSet[num - 1].pid
-        let newpid
-        if (oldpid === '') newpid = ''
-        else if (isNaN(oldpid)) newpid = oldpid.substr(0, oldpid.length - 1) + String.fromCharCode(oldpid.charCodeAt(oldpid.length - 1) + 1)
-        else newpid = (parseInt(oldpid) + 1).toString()
-        this.problemSet.push({
-          oj: this.problemSet[num - 1].oj,
-          pid: newpid,
-          difficulty: 0
-        })
-      }
-    },
-    delItem(item) {
-      var index = this.problemSet.indexOf(item)
-      if (index !== -1) {
-        this.problemSet.splice(index, 1)
-      }
-    },
-    submitCreate() {
-      const that = this
-      if (!that.newSetTitle) {
-        that.$message.error('Title cannot be empty!')
-        return
-      }
-      for (let item of that.problemSet) {
-        if (!(item.oj && item.pid)) {
-          that.$message.error('Problem cannot be empty!')
-          return
-        }
-      }
-      if (that.problemSet.length === 0) {
-        that.$message.error('ProblemSet cannot be empty!')
-        return
-      }
-      let problems = []
-      for (let prob of that.problemSet) {
-        problems.push({
-          problem: prob.oj + '-' + prob.pid,
-          difficulty: prob.difficulty
-        })
-      }
-      that.$http.post(this.api + '/v2/problem_set', {
-        name: that.newSetTitle,
-        problem_list: JSON.stringify(Array.from(problems)),
-        start_time: this.startTime,
-        end_time: this.endTime
-      })
-          .then(data => {
-            that.$message.success(data.data.msg)
-            that.initProblemSet()
-            that.getList()
-          })
-          .catch(function (error) {
-            if (error.response) {
-              that.$message.error(error.response.data.msg)
-            }
-          })
-    },
     delSet(setId) {
       const that = this
       that.$http.delete(this.api + '/v2/problem_set/' + setId)
@@ -357,6 +245,39 @@ export default {
             }
           })
     },
+    getUserList() {
+      if (!this.$store.state.Userlist) this.$store.commit('updateUserlist')
+      this.initUserList()
+    },
+    initUserList() {
+      if (this.$store.state.Userlist) {
+        let usermap = new Map()
+        for (let item of this.$store.state.Userlist) {
+          let user = item[1]
+          if (user.status === 0) continue
+          let group = user.group
+          if (user.is_freshman) group = '新生'
+          if (!usermap.has(group)) usermap.set(group, [])
+          user.label = user.nickname
+          usermap.get(group).push(user)
+        }
+        let user_list = []
+        for (let item of usermap) {
+          user_list.push({
+            label: item[0],
+            children: item[1]
+          })
+        }
+        this.userList = [{
+          label: '全部',
+          children: user_list
+        }]
+      } else {
+        setTimeout(() => {
+          this.initUserList()
+        }, 500)
+      }
+    },
     getDifficultyDescribe(difficulty) {
       switch (difficulty) {
         case 0:
@@ -380,6 +301,7 @@ export default {
     document.title = "Monitor - viewOJ"
     this.getList()
     this.getOJList()
+    this.getUserList()
   }
 }
 </script>
