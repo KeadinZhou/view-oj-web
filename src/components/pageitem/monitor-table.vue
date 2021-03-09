@@ -74,9 +74,7 @@ export default {
     },
     initData() {
       this.tableData = []
-      for (let data of this.proData.filter((a) => {
-        return !a.user.is_freshman
-      })) {
+      for (let data of this.proData) {
         let acset = new Set()
         let strictset = new Set()
         for (let ac_problem of data.data) {
