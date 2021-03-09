@@ -268,6 +268,11 @@ export default {
             children: item[1]
           })
         }
+        user_list.sort(function (a, b) {
+          if (a.label < b.label) return -1
+          else if (a.label === b.label) return 0
+          else return 1
+        })
         this.userList = [{
           label: '全部',
           children: user_list

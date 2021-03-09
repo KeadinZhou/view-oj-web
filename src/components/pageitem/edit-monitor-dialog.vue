@@ -122,7 +122,7 @@ export default {
         return
       }
       if (checked_users.length === 0) {
-        that.$message.error('Please select users')
+        that.$message.error('Please select user(s)')
         return
       }
       for (let item of that.problemSet) {
