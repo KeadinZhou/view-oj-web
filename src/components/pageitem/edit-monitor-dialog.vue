@@ -1,5 +1,5 @@
 <template>
-  <el-dialog title="Edit Monitor" :visible.sync="isVisible" append-to-body width="600px">
+  <el-dialog title="Edit Monitor" :visible.sync="isVisible" append-to-body width="650px">
     <div>
       <el-input placeholder="The Title of The New Problem Set" v-model="set_title"
                 prefix-icon="el-icon-edit-outline"></el-input>
@@ -43,6 +43,7 @@
     <el-divider><i class="el-icon-user-solid"/></el-divider>
     <el-tree
         :data="user_list"
+        node-key="username"
         show-checkbox
         check-on-click-node
         :expand-on-click-node="false"
@@ -80,6 +81,7 @@ export default {
     initProblemSet() {
       this.set_title = ''
       this.problemSet = []
+      this.$refs.user_tree.setCheckedNodes([])
       this.startTime = this.endTime = undefined
       this.isVisible = false
     },
