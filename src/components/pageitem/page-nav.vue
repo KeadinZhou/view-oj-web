@@ -2,11 +2,16 @@
   <div id="page-top">
     <el-menu :default-active="this.$route.path" class="page-nav" style="height:60px;width:100%;z-index:1000"
              mode="horizontal" router>
-      <el-submenu index="status">
-        <template slot="title">Status</template>
-        <el-menu-item index="/" route="/">Member</el-menu-item>
-        <el-menu-item index="/freshman" route="/freshman">Freshman</el-menu-item>
-      </el-submenu>
+      <template v-if="$store.state.showFreshmanStatus">
+        <el-submenu index="status">
+          <template slot="title">Status</template>
+          <el-menu-item index="/" route="/">Member</el-menu-item>
+          <el-menu-item index="/freshman" route="/freshman">Freshman</el-menu-item>
+        </el-submenu>
+      </template>
+      <template v-else>
+        <el-menu-item index="/" route="/">Status</el-menu-item>
+      </template>
       <el-menu-item index="/upcoming-list" route="/upcoming-list">Upcoming</el-menu-item>
       <el-menu-item index="/ranklist" route="/ranklist">Ranklist</el-menu-item>
       <el-menu-item index="/camp" route="/camp">Camp</el-menu-item>
