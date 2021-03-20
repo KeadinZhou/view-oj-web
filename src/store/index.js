@@ -5,6 +5,7 @@ Vue.use(Vuex)
 
 const debug = false
 const api = debug ? 'http://127.0.0.1:5000' : 'https://view-oj-api.newitd.com'
+
 var state = {
     page: null,
     api: api,
@@ -16,6 +17,7 @@ var state = {
         status: '',
         isUpdated: false
     },
+    showFreshmanStatus: false,
     backendVersion: "",
     TopLength: 25,
     TopOverviewData: [],

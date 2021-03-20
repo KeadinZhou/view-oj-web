@@ -55,6 +55,12 @@
               <span>{{ Number(scope.row.contest_num) }}</span>
             </template>
           </el-table-column>
+          <el-table-column label="last_CF" align="center" width="100px">
+            <template slot-scope="scope">
+              <p v-if="scope.row.last_cf_date">{{ $moment(scope.row.last_cf_date).fromNow() }}</p>
+              <p v-else>无记录</p>
+            </template>
+          </el-table-column>
         </el-table>
       </div>
     </el-card>
