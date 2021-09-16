@@ -4,7 +4,7 @@ import Vuex from 'vuex'
 Vue.use(Vuex)
 
 const debug = false
-const api = debug ? 'http://127.0.0.1:5000' : 'https://view-oj-api.newitd.com'
+const api = debug ? 'http://127.0.0.1:5000' : 'https://view-oj-api.zuccacm.top'
 
 var state = {
     page: null,
